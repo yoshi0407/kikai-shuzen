@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="修繕管理">
+<meta name="theme-color" content="#ffffff">
+<title>洗濯工場 修繕管理</title>
+
+<style>
+:root {
+  --bg: #ffffff;
+  --bg2: #f5f5f3;
+  --bg3: #eeede9;
+  --text: #1a1a18;
+  --text2: #6b6b67;
+  --text3: #9b9b97;
+  --border: rgba(0,0,0,0.1);
+  --border2: rgba(0,0,0,0.18);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1e;
+    --bg2: #2c2c2e;
+    --bg3: #3a3a3c;
+    --text: #f2f2f7;
+    --text2: #aeaeb2;
+    --text3: #636366;
+    --border: rgba(255,255,255,0.1);
+    --border2: rgba(255,255,255,0.18);
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; overscroll-behavior: none; }
+input, select, textarea, button { font-family: inherit; }
+
+/* ── Nav bar ── */
+.topbar { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 12px 16px 10px; display: flex; align-items: center; justify-content: space-between; }
+.topbar-title { font-size: 17px; font-weight: 600; color: var(--text); }
+.topbar-sub { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.online-dot { width: 6px; height: 6px; border-radius: 50%; background: #34c759; flex-shrink: 0; }
+
+/* ── Bottom tab bar ── */
+.tabbar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-top: 0.5px solid var(--border); display: flex; padding-bottom: var(--safe-bottom); }
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px 6px; cursor: pointer; border: none; background: none; color: var(--text3); font-size: 10px; gap: 3px; }
+.tab-item.active { color: #007aff; }
+.tab-icon { font-size: 22px; line-height: 1; }
+.tab-label { font-size: 10px; }
+
+/* ── Pages ── */
+.page { display: none; padding: 12px 12px calc(70px + var(--safe-bottom)); min-height: 100vh; }
+.page.active { display: block; }
+
+/* ── Cards ── */
+.card { background: var(--bg); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px; border: 0.5px solid var(--border); }
+.card-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; }
+
+/* ── Metrics ── */
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.metric-card { background: var(--bg); border-radius: var(--radius-lg); padding: 14px; border: 0.5px solid var(--border); }
+.metric-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.metric-value { font-size: 26px; font-weight: 700; color: var(--text); }
+.metric-value.danger { color: #ff3b30; }
+
+/* ── List items ── */
+.list-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
+.list-item:last-child { border-bottom: none; }
+.list-item:active { opacity: 0.7; }
+.list-meta { flex: 1; min-width: 0; }
+.list-title { font-size: 14px; font-weight: 500; color: var(--text); display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-bottom: 3px; }
+.list-sub { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-right { text-align: right; font-size: 11px; color: var(--text2); flex-shrink: 0; }
+
+/* ── Badges ── */
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+.b-wash { background: #dbeeff; color: #0a4c8a; }
+.b-dry { background: #fff0d0; color: #7a4a00; }
+.b-press { background: #ffe8f0; color: #8a1a44; }
+.b-conv { background: #e0f5e0; color: #1a5c1a; }
+.b-open { background: #ffe0de; color: #9a1a1a; }
+.b-done { background: #e0f5e0; color: #1a5c1a; }
+.b-prog { background: #fff0d0; color: #7a4a00; }
+
+/* ── Forms ── */
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; display: block; }
+.form-control { width: 100%; background: var(--bg2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 12px; font-size: 15px; color: var(--text); outline: none; -webkit-appearance: none; appearance: none; }
+.form-control:focus { border-color: #007aff; box-shadow: 0 0 0 3px rgba(0,122,255,0.15); }
+textarea.form-control { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* ── Buttons ── */
+.btn { border: none; border-radius: var(--radius); padding: 12px 20px; font-size: 15px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: #007aff; color: #fff; }
+.btn-secondary { background: var(--bg2); color: var(--text); border: 0.5px solid var(--border2); }
+.btn-danger { background: #ff3b30; color: #fff; }
+.btn-full { width: 100%; }
+
+/* ── Suggest dropdown ── */
+.suggest-wrap { position: relative; }
+.suggest-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); z-index: 200; max-height: 220px; overflow-y: auto; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+.suggest-list.open { display: block; }
+.suggest-section { padding: 6px 12px 3px; font-size: 11px; font-weight: 600; color: var(--text2); background: var(--bg2); text-transform: uppercase; letter-spacing: 0.04em; }
+.suggest-row { padding: 10px 14px; cursor: pointer; border-bottom: 0.5px solid var(--border); }
+.suggest-row:last-child { border-bottom: none; }
+.suggest-row:active { background: var(--bg2); }
+.suggest-name { font-size: 14px; color: var(--text); }
+.suggest-detail { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* ── Selected machine chip ── */
+.machine-chip { margin-top: 8px; background: var(--bg2); border-radius: var(--radius); padding: 10px 12px; display: none; }
+.machine-chip-label { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+.machine-chip-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.machine-chip-detail { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* ── Alert items ── */
+.alert-card { background: var(--bg); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; border-left: 4px solid #ccc; cursor: pointer; }
+.alert-card:active { opacity: 0.7; }
+.alert-card.urgent { border-left-color: #ff3b30; }
+.alert-card.warn { border-left-color: #ff9500; }
+.alert-card.ok { border-left-color: #34c759; }
+.alert-title { font-size: 13px; font-weight: 500; color: var(--text); }
+.alert-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+/* ── Bar chart ── */
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.bar-label { font-size: 12px; color: var(--text2); width: 56px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; background: var(--bg2); border-radius: 4px; height: 20px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 7px; font-size: 11px; font-weight: 600; min-width: 28px; }
+.bf-wash { background: #b5d4f4; color: #0c447c; }
+.bf-dry  { background: #fac775; color: #633806; }
+.bf-press{ background: #f4c0d1; color: #72243e; }
+.bf-conv { background: #c0dd97; color: #275009; }
+
+/* ── Section header ── */
+.section-header { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 12px; padding-top: 4px; }
+
+/* ── Filter bar ── */
+.filter-bar { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.filter-bar select, .filter-bar input { background: var(--bg); border: 0.5px solid var(--border2); border-radius: 20px; padding: 6px 12px; font-size: 13px; color: var(--text); outline: none; -webkit-appearance: none; appearance: none; flex-shrink: 0; }
+.filter-bar input { flex: 1; min-width: 100px; }
+
+/* ── Master list ── */
+.master-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
+.master-item:last-child { border-bottom: none; }
+.master-info { flex: 1; min-width: 0; }
+.master-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.master-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.master-right { text-align: right; font-size: 11px; color: var(--text2); flex-shrink: 0; margin-right: 8px; }
+.edit-btn { background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 8px; padding: 5px 10px; font-size: 12px; color: var(--text2); cursor: pointer; }
+.edit-btn:active { opacity: 0.7; }
+
+/* ── Bottom Sheet Modal ── */
+.sheet-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; }
+.sheet-overlay.open { display: block; }
+.sheet { position: fixed; bottom: 0; left: 0; right: 0; z-index: 400; background: var(--bg); border-radius: 20px 20px 0 0; padding: 0 0 calc(20px + var(--safe-bottom)); max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
+.sheet.open { transform: translateY(0); }
+.sheet-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 10px auto 14px; }
+.sheet-title { font-size: 17px; font-weight: 600; color: var(--text); padding: 0 16px 14px; border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.sheet-close { background: var(--bg2); border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 14px; color: var(--text2); display: flex; align-items: center; justify-content: center; }
+.sheet-body { padding: 16px; }
+.detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); gap: 12px; }
+.detail-row:last-child { border-bottom: none; }
+.detail-key { font-size: 13px; color: var(--text2); flex-shrink: 0; }
+.detail-val { font-size: 13px; color: var(--text); text-align: right; }
+.sheet-actions { padding: 0 16px; display: flex; gap: 8px; flex-direction: column; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(50,50,50,0.92); color: #fff; padding: 9px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Empty state ── */
+.empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
+
+/* ── Monthly chart canvas ── */
+.chart-wrap { position: relative; width: 100%; height: 150px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">修繕管理</div>
+  </div>
+  <div class="topbar-sub">
+    <div class="online-dot"></div>
+    <span>共有データ</span>
+    <button onclick="reloadData()" style="background:none;border:none;font-size:13px;color:#007aff;cursor:pointer;padding:2px 6px;">更新</button>
+  </div>
+</div>
+
+<!-- Pages -->
+<div class="page active" id="page-dash">
+  <div class="metrics-grid" id="metrics"></div>
+  <div class="card">
+    <div class="card-title">設備別修繕回数</div>
+    <div id="type-bars"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">月別修繕件数（直近6ヶ月）</div>
+    <div class="chart-wrap"><canvas id="monthly-chart" role="img" aria-label="月別修繕件数">月別修繕件数</canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">アラート</div>
+    <div id="dash-alerts"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">最近の記録</div>
+    <div id="recent-recs"></div>
+  </div>
+</div>
+
+<div class="page" id="page-new">
+  <div class="section-header">新規記録</div>
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">設備を選択</label>
+      <div class="suggest-wrap">
+        <input type="text" class="form-control" id="f-name" placeholder="機械名を入力または選択…" autocomplete="off"
+          oninput="onNameInput()" onfocus="onNameFocus()" onblur="onNameBlur()">
+        <div class="suggest-list" id="name-suggest"></div>
+      </div>
+      <div class="machine-chip" id="selected-chip">
+        <div class="machine-chip-label">選択中の設備</div>
+        <div class="machine-chip-name" id="chip-name"></div>
+        <div class="machine-chip-detail" id="chip-detail"></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">設備種別</label>
+        <select class="form-control" id="f-type">
+          <option value="洗濯機">洗濯機</option>
+          <option value="乾燥機">乾燥機</option>
+          <option value="プレス機・アイロン機">プレス機・アイロン機</option>
+          <option value="搬送コンベア・ハンガーシステム">搬送コンベア</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">発生日</label>
+        <input type="date" class="form-control" id="f-date">
+      </div>
+    </div>
+    <div class="form-row3">
+      <div class="form-group">
+        <label class="form-label">対応状況</label>
+        <select class="form-control" id="f-status">
+          <option value="未対応">未対応</option>
+          <option value="対応中">対応中</option>
+          <option value="修繕完了">修繕完了</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">優先度</label>
+        <select class="form-control" id="f-priority">
+          <option value="高">高</option>
+          <option value="中">中</option>
+          <option value="低">低</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">カテゴリ</label>
+        <select class="form-control" id="f-cat">
+          <option value="機械的故障">機械的故障</option>
+          <option value="電気系統">電気系統</option>
+          <option value="制御系統">制御系統</option>
+          <option value="消耗品交換">消耗品交換</option>
+          <option value="定期点検">定期点検</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">故障・不具合の内容</label>
+      <textarea class="form-control" id="f-problem" placeholder="例: ドラムから異音が発生。回転速度が低下している。"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">対応者</label>
+        <input type="text" class="form-control" id="f-worker" placeholder="山田 太郎">
+      </div>
+      <div class="form-group">
+        <label class="form-label">修繕費用（円）</label>
+        <input type="number" class="form-control" id="f-cost" placeholder="15000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">使用部品・交換部品</label>
+      <input type="text" class="form-control" id="f-parts" placeholder="例: ベルト交換、モーターベアリング">
+    </div>
+    <div class="form-group">
+      <label class="form-label">次回点検予定日</label>
+      <input type="date" class="form-control" id="f-nextcheck">
+    </div>
+    <div class="form-group">
+      <label class="form-label">備考・メモ</label>
+      <textarea class="form-control" id="f-note" placeholder="例: 3ヶ月後に再点検推奨"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1" onclick="saveRec()">記録を保存</button>
+      <button class="btn btn-secondary" onclick="clearForm()">クリア</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-list">
+  <div class="section-header">修繕履歴</div>
+  <div class="filter-bar">
+    <select id="fl-type" onchange="renderList()">
+      <option value="">すべての設備</option>
+      <option value="洗濯機">洗濯機</option>
+      <option value="乾燥機">乾燥機</option>
+      <option value="プレス機・アイロン機">プレス機</option>
+      <option value="搬送コンベア・ハンガーシステム">搬送</option>
+    </select>
+    <select id="fl-status" onchange="renderList()">
+      <option value="">すべての状態</option>
+      <option value="未対応">未対応</option>
+      <option value="対応中">対応中</option>
+      <option value="修繕完了">修繕完了</option>
+    </select>
+    <input type="text" id="fl-q" placeholder="検索…" oninput="renderList()">
+  </div>
+  <div class="card" style="padding:0 16px">
+    <div id="rec-list"></div>
+  </div>
+</div>
+
+<div class="page" id="page-alert">
+  <div class="section-header">アラート</div>
+  <div id="alert-list"></div>
+  <div style="font-size:13px;font-weight:600;color:var(--text2);margin:14px 0 8px">対応中・未対応</div>
+  <div class="card" style="padding:0 16px"><div id="pending-list"></div></div>
+</div>
+
+<div class="page" id="page-master">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="section-header" style="margin-bottom:0">設備マスター</div>
+    <button class="btn btn-primary" style="padding:8px 14px;font-size:13px" onclick="openMachineSheet(null)">+ 追加</button>
+  </div>
+  <div class="filter-bar">
+    <select id="mf-type" onchange="renderMaster()">
+      <option value="">すべての種別</option>
+      <option value="洗濯機">洗濯機</option>
+      <option value="乾燥機">乾燥機</option>
+      <option value="プレス機・アイロン機">プレス機</option>
+      <option value="搬送コンベア・ハンガーシステム">搬送</option>
+    </select>
+    <input type="text" id="mf-q" placeholder="機械名で検索…" oninput="renderMaster()">
+  </div>
+  <div class="card" style="padding:0 16px"><div id="master-list"></div></div>
+</div>
+
+<!-- Bottom Tab Bar -->
+<div class="tabbar">
+  <button class="tab-item active" onclick="goPage('dash',this)">
+    <span class="tab-icon">&#9632;</span>
+    <span class="tab-label">ダッシュボード</span>
+  </button>
+  <button class="tab-item" onclick="goPage('new',this)">
+    <span class="tab-icon">&#43;</span>
+    <span class="tab-label">新規記録</span>
+  </button>
+  <button class="tab-item" onclick="goPage('list',this)">
+    <span class="tab-icon">&#9776;</span>
+    <span class="tab-label">履歴</span>
+  </button>
+  <button class="tab-item" onclick="goPage('alert',this)">
+    <span class="tab-icon">&#9888;</span>
+    <span class="tab-label">アラート</span>
+  </button>
+  <button class="tab-item" onclick="goPage('master',this)">
+    <span class="tab-icon">&#9881;</span>
+    <span class="tab-label">設備</span>
+  </button>
+</div>
+
+<!-- Detail Sheet -->
+<div class="sheet-overlay" id="detail-overlay" onclick="closeDetailSheet()"></div>
+<div class="sheet" id="detail-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">
+    <span id="ds-title"></span>
+    <button class="sheet-close" onclick="closeDetailSheet()">✕</button>
+  </div>
+  <div class="sheet-body" id="ds-body"></div>
+  <div class="sheet-actions" id="ds-actions"></div>
+</div>
+
+<!-- Machine Sheet -->
+<div class="sheet-overlay" id="machine-overlay" onclick="closeMachineSheet()"></div>
+<div class="sheet" id="machine-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">
+    <span id="ms-title">設備を登録</span>
+    <button class="sheet-close" onclick="closeMachineSheet()">✕</button>
+  </div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">設備種別</label><select class="form-control" id="mm-type"><option value="洗濯機">洗濯機</option><option value="乾燥機">乾燥機</option><option value="プレス機・アイロン機">プレス機・アイロン機</option><option value="搬送コンベア・ハンガーシステム">搬送コンベア・ハンガーシステム</option></select></div>
+    <div class="form-group"><label class="form-label">機械番号・名称</label><input type="text" class="form-control" id="mm-name" placeholder="例: 洗濯機-A1"></div>
+    <div class="form-group"><label class="form-label">メーカー・型番</label><input type="text" class="form-control" id="mm-maker" placeholder="例: 東京洗機 TW-500"></div>
+    <div class="form-group"><label class="form-label">設置年月</label><input type="month" class="form-control" id="mm-installed"></div>
+    <div class="form-group"><label class="form-label">設置場所</label><input type="text" class="form-control" id="mm-location" placeholder="例: 第1工場 Aライン"></div>
+    <div class="form-group"><label class="form-label">定期点検サイクル</label><select class="form-control" id="mm-cycle"><option value="">指定なし</option><option value="1ヶ月">毎月</option><option value="3ヶ月">3ヶ月ごと</option><option value="6ヶ月">6ヶ月ごと</option><option value="1年">年1回</option></select></div>
+    <div class="form-group"><label class="form-label">備考</label><textarea class="form-control" id="mm-note" placeholder="例: 高温対応モデル"></textarea></div>
+    <div style="display:flex;gap:8px;flex-direction:column">
+      <button class="btn btn-primary btn-full" onclick="saveMachine()">保存</button>
+      <button class="btn btn-secondary btn-full" id="mm-delete-btn" style="display:none;color:#ff3b30" onclick="deleteMachineFromSheet()">この設備を削除</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const SK_REC = 'shared_laundry_repair_v1';
+const SK_MAC = 'shared_laundry_machines_v1';
+let recs = [], machines = [], editingMachineId = null;
+let monthChart = null;
+
+const TYPES = ['洗濯機','乾燥機','プレス機・アイロン機','搬送コンベア・ハンガーシステム'];
+const TLABELS = ['洗濯機','乾燥機','プレス機','搬送'];
+const TFILLS = ['bf-wash','bf-dry','bf-press','bf-conv'];
+const BBADGE = ['b-wash','b-dry','b-press','b-conv'];
+const CATS = ['機械的故障','電気系統','制御系統','消耗品交換','定期点検','その他'];
+
+/* ── Storage ── */
+async function load() {
+  try { const r = await window.storage.get(SK_REC, true); if (r && r.value) recs = JSON.parse(r.value); } catch(e) { recs = []; }
+  try { const m = await window.storage.get(SK_MAC, true); if (m && m.value) machines = JSON.parse(m.value); } catch(e) { machines = []; }
+  initDemo();
+  renderDash();
+  renderList();
+  renderAlert();
+  renderMaster();
+}
+
+async function reloadData() {
+  try { const r = await window.storage.get(SK_REC, true); if (r && r.value) recs = JSON.parse(r.value); } catch(e) {}
+  try { const m = await window.storage.get(SK_MAC, true); if (m && m.value) machines = JSON.parse(m.value); } catch(e) {}
+  renderDash(); renderList(); renderAlert(); renderMaster();
+  toast('データを更新しました');
+}
+
+async function saveRecs() { try { await window.storage.set(SK_REC, JSON.stringify(recs), true); } catch(e) {} }
+async function saveMachines() { try { await window.storage.set(SK_MAC, JSON.stringify(machines), true); } catch(e) {} }
+
+function initDemo() {
+  if (machines.length === 0) {
+    machines = [
+      {id:101,type:'洗濯機',name:'洗濯機-A1',maker:'東京洗機 TW-500',installed:'2019-04',location:'第1工場 Aライン',cycle:'6ヶ月',note:'大容量モデル'},
+      {id:102,type:'洗濯機',name:'洗濯機-A2',maker:'東京洗機 TW-500',installed:'2019-04',location:'第1工場 Aライン',cycle:'6ヶ月',note:''},
+      {id:103,type:'洗濯機',name:'洗濯機-A3',maker:'大阪機工 WM-300',installed:'2021-07',location:'第1工場 Bライン',cycle:'6ヶ月',note:''},
+      {id:201,type:'乾燥機',name:'乾燥機-B1',maker:'日本乾燥 DR-200',installed:'2018-10',location:'第2工場',cycle:'3ヶ月',note:'フィルター要定期清掃'},
+      {id:202,type:'乾燥機',name:'乾燥機-B2',maker:'日本乾燥 DR-200',installed:'2020-03',location:'第2工場',cycle:'3ヶ月',note:''},
+      {id:301,type:'プレス機・アイロン機',name:'プレス機-C1',maker:'京都プレス KP-100',installed:'2020-06',location:'第3工場',cycle:'6ヶ月',note:'温度制御注意'},
+      {id:401,type:'搬送コンベア・ハンガーシステム',name:'コンベア-D1',maker:'コンベア工業 CV-50',installed:'2017-01',location:'全工場連絡通路',cycle:'1ヶ月',note:'チェーン伸び確認'},
+    ];
+    saveMachines();
+  }
+  if (recs.length === 0) {
+    const today = new Date();
+    function dStr(n){const d=new Date(today);d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];}
+    recs = [
+      {id:1,type:'洗濯機',name:'洗濯機-A1',date:dStr(-40),status:'修繕完了',priority:'高',problem:'ドラムから異音。ベアリング摩耗。',worker:'山田太郎',cost:25000,parts:'モーターベアリング',cat:'機械的故障',nextcheck:dStr(50),note:'半年後に再点検'},
+      {id:2,type:'乾燥機',name:'乾燥機-B2',date:dStr(-20),status:'修繕完了',priority:'中',problem:'加熱不良。ヒーター交換。',worker:'鈴木一郎',cost:18000,parts:'電気ヒーター',cat:'電気系統',nextcheck:dStr(40),note:''},
+      {id:3,type:'洗濯機',name:'洗濯機-A2',date:dStr(-10),status:'対応中',priority:'高',problem:'排水ポンプ故障。水漏れあり。',worker:'田中花子',cost:12000,parts:'排水ポンプ',cat:'機械的故障',nextcheck:dStr(20),note:'部品入荷待ち'},
+      {id:4,type:'プレス機・アイロン機',name:'プレス機-C1',date:dStr(-5),status:'未対応',priority:'中',problem:'温度制御の異常。設定温度に達しない。',worker:'',cost:null,parts:'',cat:'制御系統',nextcheck:dStr(10),note:'至急対応が必要'},
+      {id:5,type:'搬送コンベア・ハンガーシステム',name:'コンベア-D1',date:dStr(-60),status:'修繕完了',priority:'低',problem:'チェーン伸び。定期交換。',worker:'山田太郎',cost:8000,parts:'搬送チェーン',cat:'消耗品交換',nextcheck:dStr(5),note:''},
+      {id:6,type:'乾燥機',name:'乾燥機-B1',date:dStr(-80),status:'修繕完了',priority:'中',problem:'フィルター目詰まり。',worker:'鈴木一郎',cost:3000,parts:'フィルター',cat:'消耗品交換',nextcheck:dStr(2),note:'定期清掃推奨'},
+      {id:7,type:'洗濯機',name:'洗濯機-A3',date:dStr(-90),status:'修繕完了',priority:'低',problem:'ドアパッキン劣化。水漏れ。',worker:'田中花子',cost:6000,parts:'ドアパッキン',cat:'消耗品交換',nextcheck:dStr(-3),note:''},
+    ];
+    saveRecs();
+  }
+}
+
+/* ── Navigation ── */
+function goPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'list') renderList();
+  if (name === 'alert') renderAlert();
+  if (name === 'master') renderMaster();
+}
+
+/* ── Helpers ── */
+function typeBadge(type) { const i = TYPES.indexOf(type); return `<span class="badge ${BBADGE[i]||'b-wash'}">${TLABELS[i]||type}</span>`; }
+function stBadge(s) { const m = {未対応:'b-open',対応中:'b-prog',修繕完了:'b-done'}; return `<span class="badge ${m[s]||'b-open'}">${s}</span>`; }
+
+/* ── Dashboard ── */
+function renderDash() {
+  const total = recs.length;
+  const open = recs.filter(r => r.status !== '修繕完了').length;
+  const now = new Date();
+  const thisM = recs.filter(r => { if(!r.date)return false; const d=new Date(r.date); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); }).length;
+  const totalCost = recs.reduce((s,r) => s+(r.cost||0), 0);
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-label">総修繕件数</div><div class="metric-value">${total}</div></div>
+    <div class="metric-card"><div class="metric-label">対応中・未対応</div><div class="metric-value danger">${open}</div></div>
+    <div class="metric-card"><div class="metric-label">今月の修繕</div><div class="metric-value">${thisM}</div></div>
+    <div class="metric-card"><div class="metric-label">累計費用</div><div class="metric-value" style="font-size:18px">${totalCost.toLocaleString()}円</div></div>`;
+
+  const counts = TYPES.map(t => recs.filter(r => r.type === t).length);
+  const maxC = Math.max(...counts, 1);
+  document.getElementById('type-bars').innerHTML = TYPES.map((t,i) => `
+    <div class="bar-row"><div class="bar-label">${TLABELS[i]}</div>
+    <div class="bar-track"><div class="bar-fill ${TFILLS[i]}" style="width:${Math.round(counts[i]/maxC*100)}%">${counts[i]}件</div></div></div>`).join('');
+
+  renderMonthlyChart();
+
+  const alerts = getAlerts().slice(0,3);
+  document.getElementById('dash-alerts').innerHTML = alerts.length
+    ? alerts.map(a => `<div class="alert-card ${a.cls}"><div class="alert-title">${a.title}</div><div class="alert-sub">${a.sub}</div></div>`).join('')
+    : '<div class="empty">アラートなし</div>';
+
+  const recent = recs.slice().sort((a,b) => new Date(b.date||0)-new Date(a.date||0)).slice(0,4);
+  document.getElementById('recent-recs').innerHTML = recent.map(r => recHTML(r)).join('');
+}
+
+function renderMonthlyChart() {
+  const months = [], labels = [];
+  for (let i=5; i>=0; i--) { const d=new Date(); d.setMonth(d.getMonth()-i); labels.push((d.getMonth()+1)+'月'); months.push({y:d.getFullYear(),m:d.getMonth()}); }
+  const data = months.map(({y,m}) => recs.filter(r => { if(!r.date)return false; const d=new Date(r.date); return d.getFullYear()===y&&d.getMonth()===m; }).length);
+  if (monthChart) monthChart.destroy();
+  monthChart = new Chart(document.getElementById('monthly-chart'), {
+    type:'bar', data:{labels, datasets:[{label:'件数', data, backgroundColor:'#b5d4f4', borderRadius:5}]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:10}},grid:{color:'rgba(128,128,128,0.15)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+}
+
+/* ── Alert ── */
+function getAlerts() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const alerts = [];
+  recs.forEach(r => {
+    if (!r.nextcheck) return;
+    const nc = new Date(r.nextcheck); nc.setHours(0,0,0,0);
+    const diff = Math.round((nc-today)/(1000*60*60*24));
+    if (diff < 0) alerts.push({cls:'urgent',title:`【期限超過】${r.name} — 点検${Math.abs(diff)}日超過`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
+    else if (diff <= 7) alerts.push({cls:'warn',title:`【要注意】${r.name} — ${diff}日後に点検`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
+    else if (diff <= 30) alerts.push({cls:'ok',title:`${r.name} — ${diff}日後に点検`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
+  });
+  alerts.sort((a,b) => ({'urgent':0,'warn':1,'ok':2}[a.cls]-{'urgent':0,'warn':1,'ok':2}[b.cls]));
+  return alerts;
+}
+
+function renderAlert() {
+  const alerts = getAlerts();
+  document.getElementById('alert-list').innerHTML = alerts.length
+    ? alerts.map(a => `<div class="alert-card ${a.cls}" onclick="showDetail(${a.rec.id})"><div class="alert-title">${a.title}</div><div class="alert-sub">${a.sub}</div></div>`).join('')
+    : '<div class="empty">期限超過・近接の点検なし</div>';
+  const pending = recs.filter(r => r.status !== '修繕完了');
+  document.getElementById('pending-list').innerHTML = pending.length ? pending.map(r => recHTML(r)).join('') : '<div class="empty">対応中・未対応なし</div>';
+}
+
+/* ── Record list ── */
+function recHTML(r) {
+  const ti = TYPES.indexOf(r.type);
+  const stM = {未対応:'b-open',対応中:'b-prog',修繕完了:'b-done'};
+  return `<div class="list-item" onclick="showDetail(${r.id})">
+    <div class="list-meta">
+      <div class="list-title"><span class="badge ${BBADGE[ti]||'b-wash'}">${TLABELS[ti]||r.type}</span>${r.name}<span class="badge ${stM[r.status]||'b-open'}">${r.status}</span></div>
+      <div class="list-sub">${(r.problem||'').slice(0,40)}${(r.problem||'').length>40?'…':''}</div>
+    </div>
+    <div class="list-right">${r.date||'—'}<br>${r.cost!=null?r.cost.toLocaleString()+'円':'—'}</div>
+  </div>`;
+}
+
+function renderList() {
+  const ft = document.getElementById('fl-type').value;
+  const fs = document.getElementById('fl-status').value;
+  const fq = (document.getElementById('fl-q').value||'').toLowerCase();
+  const filtered = recs.slice().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).filter(r => {
+    if (ft && r.type !== ft) return false;
+    if (fs && r.status !== fs) return false;
+    if (fq && !(r.name.toLowerCase().includes(fq)||(r.problem||'').toLowerCase().includes(fq))) return false;
+    return true;
+  });
+  document.getElementById('rec-list').innerHTML = filtered.length ? filtered.map(r=>recHTML(r)).join('') : '<div class="empty">該当する記録がありません</div>';
+}
+
+/* ── Detail sheet ── */
+function showDetail(id) {
+  const r = recs.find(x=>x.id===id); if(!r) return;
+  document.getElementById('ds-title').innerHTML = `${r.name} ${typeBadge(r.type)}`;
+  const rows = [['対応状況',stBadge(r.status)],['優先度',r.priority||'—'],['発生日',r.date||'—'],['カテゴリ',r.cat||'—'],['不具合内容',r.problem||'—'],['対応者',r.worker||'—'],['使用部品',r.parts||'—'],['修繕費用',r.cost!=null?r.cost.toLocaleString()+'円':'—'],['次回点検',r.nextcheck||'—'],['備考',r.note||'—']];
+  document.getElementById('ds-body').innerHTML = rows.map(([k,v])=>`<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`).join('');
+  document.getElementById('ds-actions').innerHTML = r.status !== '修繕完了'
+    ? `<button class="btn btn-primary btn-full" onclick="markDone(${r.id})">修繕完了にする</button><button class="btn btn-secondary btn-full" onclick="deleteRec(${r.id})" style="color:#ff3b30">削除</button>`
+    : `<button class="btn btn-secondary btn-full" onclick="deleteRec(${r.id})" style="color:#ff3b30">削除</button>`;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-sheet').classList.add('open');
+}
+function closeDetailSheet() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-sheet').classList.remove('open');
+}
+
+function markDone(id) {
+  const r = recs.find(x=>x.id===id); if(!r) return;
+  r.status = '修繕完了'; saveRecs(); renderDash(); renderList(); renderAlert();
+  closeDetailSheet(); toast('修繕完了に更新しました');
+}
+function deleteRec(id) {
+  recs = recs.filter(x=>x.id!==id); saveRecs(); renderDash(); renderList(); renderAlert();
+  closeDetailSheet(); toast('記録を削除しました');
+}
+
+/* ── Master ── */
+function renderMaster() {
+  const ft = document.getElementById('mf-type').value;
+  const fq = (document.getElementById('mf-q').value||'').toLowerCase();
+  const filtered = machines.filter(m => { if(ft&&m.type!==ft)return false; if(fq&&!m.name.toLowerCase().includes(fq))return false; return true; });
+  if (!filtered.length) { document.getElementById('master-list').innerHTML='<div class="empty">登録された設備がありません</div>'; return; }
+  const byType = {}; TYPES.forEach(t=>byType[t]=[]);
+  filtered.forEach(m => { if(byType[m.type]) byType[m.type].push(m); });
+  let html = '';
+  TYPES.forEach((t,ti) => {
+    if (!byType[t].length) return;
+    html += `<div style="padding:10px 0 4px;font-size:11px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px"><span class="badge ${BBADGE[ti]}">${TLABELS[ti]}</span>${byType[t].length}台</div>`;
+    byType[t].forEach(m => {
+      const cnt = recs.filter(r=>r.name===m.name).length;
+      html += `<div class="master-item">
+        <div class="master-info"><div class="master-name">${m.name}</div><div class="master-sub">${[m.maker,m.location].filter(Boolean).join(' / ')}</div></div>
+        <div class="master-right">修繕${cnt}回<br>${m.cycle||'—'}</div>
+        <button class="edit-btn" onclick="openMachineSheet(${m.id})">編集</button>
+      </div>`;
+    });
+  });
+  document.getElementById('master-list').innerHTML = html;
+}
+
+function openMachineSheet(id) {
+  editingMachineId = id;
+  const m = id ? machines.find(x=>x.id===id) : null;
+  document.getElementById('ms-title').textContent = m ? '設備を編集' : '設備を新規登録';
+  document.getElementById('mm-type').value = m ? m.type : '洗濯機';
+  document.getElementById('mm-name').value = m ? m.name : '';
+  document.getElementById('mm-maker').value = m ? m.maker : '';
+  document.getElementById('mm-installed').value = m ? m.installed : '';
+  document.getElementById('mm-location').value = m ? m.location : '';
+  document.getElementById('mm-cycle').value = m ? m.cycle : '';
+  document.getElementById('mm-note').value = m ? m.note : '';
+  document.getElementById('mm-delete-btn').style.display = m ? 'block' : 'none';
+  document.getElementById('machine-overlay').classList.add('open');
+  document.getElementById('machine-sheet').classList.add('open');
+}
+function closeMachineSheet() {
+  document.getElementById('machine-overlay').classList.remove('open');
+  document.getElementById('machine-sheet').classList.remove('open');
+}
+function saveMachine() {
+  const name = document.getElementById('mm-name').value.trim();
+  if (!name) { toast('機械名は必須です'); return; }
+  if (!editingMachineId && machines.find(m=>m.name===name)) { toast('同じ名称が既に登録されています'); return; }
+  const data = { type:document.getElementById('mm-type').value, name, maker:document.getElementById('mm-maker').value.trim(), installed:document.getElementById('mm-installed').value, location:document.getElementById('mm-location').value.trim(), cycle:document.getElementById('mm-cycle').value, note:document.getElementById('mm-note').value.trim() };
+  if (editingMachineId) { const idx=machines.findIndex(m=>m.id===editingMachineId); if(idx>=0) machines[idx]={...machines[idx],...data}; }
+  else { machines.push({id:Date.now(),...data}); }
+  saveMachines(); closeMachineSheet(); renderMaster();
+  toast(editingMachineId ? '設備情報を更新しました' : '設備を登録しました');
+}
+function deleteMachineFromSheet() {
+  if (!editingMachineId) return;
+  machines = machines.filter(m=>m.id!==editingMachineId);
+  saveMachines(); closeMachineSheet(); renderMaster(); toast('設備を削除しました');
+}
+
+/* ── New record form ── */
+function onNameInput() { const q=document.getElementById('f-name').value.toLowerCase(); showSuggest(q); document.getElementById('selected-chip').style.display='none'; }
+function onNameFocus() { const q=document.getElementById('f-name').value.toLowerCase(); showSuggest(q); }
+function onNameBlur() { setTimeout(()=>document.getElementById('name-suggest').classList.remove('open'), 200); }
+
+function showSuggest(q) {
+  const el = document.getElementById('name-suggest');
+  const filtered = machines.filter(m => !q || m.name.toLowerCase().includes(q) || (m.location||'').toLowerCase().includes(q));
+  if (!filtered.length) { el.classList.remove('open'); return; }
+  const byType = {}; TYPES.forEach(t=>byType[t]=[]);
+  filtered.forEach(m => { if(byType[m.type]) byType[m.type].push(m); });
+  let html = '';
+  TYPES.forEach((t,ti) => {
+    if (!byType[t].length) return;
+    html += `<div class="suggest-section">${TLABELS[ti]}</div>`;
+    byType[t].forEach(m => { html += `<div class="suggest-row" onmousedown="selectMachine(${m.id})"><div class="suggest-name">${m.name}</div><div class="suggest-detail">${[m.maker,m.location].filter(Boolean).join(' / ')}</div></div>`; });
+  });
+  el.innerHTML = html; el.classList.add('open');
+}
+
+function selectMachine(id) {
+  const m = machines.find(x=>x.id===id); if(!m) return;
+  document.getElementById('f-name').value = m.name;
+  document.getElementById('f-type').value = m.type;
+  document.getElementById('name-suggest').classList.remove('open');
+  const ti = TYPES.indexOf(m.type);
+  document.getElementById('chip-name').innerHTML = `<span class="badge ${BBADGE[ti]||'b-wash'}">${TLABELS[ti]||m.type}</span> ${m.name}`;
+  document.getElementById('chip-detail').textContent = [m.maker&&`メーカー: ${m.maker}`, m.location&&`場所: ${m.location}`, m.cycle&&`点検: ${m.cycle}`].filter(Boolean).join('　');
+  document.getElementById('selected-chip').style.display = 'block';
+}
+
+function saveRec() {
+  const name = document.getElementById('f-name').value.trim();
+  const date = document.getElementById('f-date').value;
+  const problem = document.getElementById('f-problem').value.trim();
+  if (!name || !date || !problem) { toast('機械名・発生日・内容は必須です'); return; }
+  const cost = document.getElementById('f-cost').value;
+  recs.unshift({ id:Date.now(), type:document.getElementById('f-type').value, name, date, status:document.getElementById('f-status').value, priority:document.getElementById('f-priority').value, problem, worker:document.getElementById('f-worker').value.trim(), cost:cost?parseInt(cost):null, parts:document.getElementById('f-parts').value.trim(), cat:document.getElementById('f-cat').value, nextcheck:document.getElementById('f-nextcheck').value, note:document.getElementById('f-note').value.trim() });
+  saveRecs(); clearForm(); renderDash();
+  document.querySelectorAll('.tab-item')[0].click();
+  toast('記録を保存しました');
+}
+
+function clearForm() {
+  ['f-name','f-problem','f-worker','f-cost','f-parts','f-note','f-nextcheck'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('selected-chip').style.display = 'none';
+  document.getElementById('name-suggest').classList.remove('open');
+}
+
+/* ── Toast ── */
+function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+/* ── Init ── */
+document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+load();
+</script>
+
+<!-- PWA Service Worker registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  const sw = `
+self.addEventListener('install', e => e.waitUntil(
+  caches.open('repair-v1').then(c => c.addAll(['.']))
+));
+self.addEventListener('fetch', e => e.respondWith(
+  caches.match(e.request).then(r => r || fetch(e.request))
+));`;
+  const blob = new Blob([sw], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+</script>
+
+</body>
+</html>
