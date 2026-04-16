@@ -602,13 +602,22 @@
       <!-- Machines -->
       <div id="page-machines" class="page">
         <div id="machine-list-view">
-          <div class="section-header" style="margin-bottom:16px">
+          <div class="section-header" style="margin-bottom:10px">
             <span class="section-title">⚙️ 設備マスター</span>
             <div style="display:flex;gap:6px">
               <button class="btn btn-sm btn-secondary" onclick="openImportModal()" title="修繕記録から設備を取り込む">📥 記録から取込</button>
               <button class="btn btn-sm btn-primary" onclick="openMachineForm()">＋ 追加</button>
             </div>
           </div>
+          <div class="filter-bar" id="machine-type-filter">
+            <button class="filter-btn active" data-val="" onclick="setMachineFilter('',this)">すべて</button>
+            <button class="filter-btn" data-val="wash" onclick="setMachineFilter('wash',this)">洗濯機</button>
+            <button class="filter-btn" data-val="dry" onclick="setMachineFilter('dry',this)">乾燥機</button>
+            <button class="filter-btn" data-val="press" onclick="setMachineFilter('press',this)">プレス機</button>
+            <button class="filter-btn" data-val="conv" onclick="setMachineFilter('conv',this)">搬送</button>
+            <button class="filter-btn" data-val="other" onclick="setMachineFilter('other',this)">その他</button>
+          </div>
+          <div id="machine-count" style="font-size:12px;color:var(--text2);margin-bottom:8px;"></div>
           <div id="machine-list"></div>
         </div>
         <div id="machine-detail-view" style="display:none">
@@ -1191,13 +1200,30 @@ function renderAlerts() {
 // ============================================================
 // MACHINES
 // ============================================================
+let machineTypeFilter = '';
+
+function setMachineFilter(val, el) {
+  machineTypeFilter = val;
+  document.querySelectorAll('#machine-type-filter .filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderMachineList();
+}
+
 function renderMachineList() {
   const el = document.getElementById('machine-list');
+  const countEl = document.getElementById('machine-count');
   if (!machines.length) {
     el.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-text">設備が登録されていません</div></div>';
+    if (countEl) countEl.textContent = '';
     return;
   }
-  el.innerHTML = machines.map(m => {
+  const filtered = machineTypeFilter ? machines.filter(m => m.type === machineTypeFilter) : machines;
+  if (countEl) countEl.textContent = machineTypeFilter ? `${filtered.length}件（全${machines.length}件中）` : `全${machines.length}件`;
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-text">該当する設備がありません</div></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(m => {
     const recs = records.filter(r=>r.machine===m.name);
     const cost = recs.reduce((s,r)=>s+(Number(r.cost)||0),0);
     const last = [...recs].sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
