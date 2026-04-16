@@ -727,14 +727,13 @@ let filters = { type: '', status: '' };
 let periods = { history: 'all', analysis: 'all' };
 let chartMachine = null, chartMonthly = null, chartCost = null;
 
-const RECORDS_KEY = 'shared_laundry_repair_v1';
-const MACHINES_KEY = 'shared_laundry_machines_v1';
-const VERSION_KEY = 'shared_laundry_app_version_v1';
+// ============================================================
+// FIREBASE REALTIME DATABASE CONFIG
+// ============================================================
+const FB_URL = 'https://kikai-shuzen-default-rtdb.asia-southeast1.firebasedatabase.app';
 const APP_VERSION = document.querySelector('meta[name="app-version"]').content;
 
-// Snapshot hashes for change detection
-let lastRecordsHash = '';
-let lastMachinesHash = '';
+let lastDataHash = '';
 
 function hashStr(s) {
   let h = 0;
@@ -742,46 +741,46 @@ function hashStr(s) {
   return h.toString(36);
 }
 
+// Firebase Realtime Database からデータ読み込み
 async function loadData() {
   try {
-    const r = await window.storage.get(RECORDS_KEY, true);
-    if (r && r.value) records = JSON.parse(r.value);
-  } catch(e) {}
-  try {
-    const m = await window.storage.get(MACHINES_KEY, true);
-    if (m && m.value) machines = JSON.parse(m.value);
-  } catch(e) {}
+    const res = await fetch(FB_URL + '/laundry.json?t=' + Date.now());
+    if (!res.ok) throw new Error('fetch failed ' + res.status);
+    const data = await res.json();
+    if (data) {
+      if (Array.isArray(data.records))  records  = data.records;
+      if (Array.isArray(data.machines)) machines = data.machines;
+      lastDataHash = hashStr(JSON.stringify({ records, machines }));
+    }
+  } catch(e) {
+    console.error('loadData error', e);
+  }
 }
 
-async function saveRecords() {
-  isSyncing = true; // ポーリングをブロック
+// Firebase Realtime Database にデータ保存
+async function saveAll() {
+  isSyncing = true;
   setSyncState('syncing');
   try {
-    const json = JSON.stringify(records);
-    await window.storage.set(RECORDS_KEY, json, true);
-    lastRecordsHash = hashStr(json);
+    const body = { records, machines, appVersion: APP_VERSION };
+    const res = await fetch(FB_URL + '/laundry.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('save failed ' + res.status);
+    lastDataHash = hashStr(JSON.stringify({ records, machines }));
     setSyncState('ok');
   } catch(e) {
     setSyncState('error');
-    showToast('保存に失敗しました');
+    showToast('保存に失敗しました。通信を確認してください');
+    console.error('saveAll error', e);
   }
   isSyncing = false;
 }
 
-async function saveMachines() {
-  isSyncing = true; // ポーリングをブロック
-  setSyncState('syncing');
-  try {
-    const json = JSON.stringify(machines);
-    await window.storage.set(MACHINES_KEY, json, true);
-    lastMachinesHash = hashStr(json);
-    setSyncState('ok');
-  } catch(e) {
-    setSyncState('error');
-    showToast('保存に失敗しました');
-  }
-  isSyncing = false;
-}
+async function saveRecords()  { await saveAll(); }
+async function saveMachines() { await saveAll(); }
 
 async function refreshData() {
   setSyncState('syncing');
@@ -805,37 +804,25 @@ async function pollForChanges() {
   if (isSyncing) return;
   isSyncing = true;
   try {
-    // バージョンチェックも同時に行う
-    const [rRes, mRes, vRes] = await Promise.all([
-      window.storage.get(RECORDS_KEY, true).catch(() => null),
-      window.storage.get(MACHINES_KEY, true).catch(() => null),
-      window.storage.get(VERSION_KEY, true).catch(() => null),
-    ]);
+    const res = await fetch(FB_URL + '/laundry.json?t=' + Date.now());
+    if (!res.ok) throw new Error('poll failed ' + res.status);
+    const data = await res.json();
+    if (!data) { isSyncing = false; return; }
 
     // アプリバージョンチェック
-    if (vRes && vRes.value && vRes.value !== APP_VERSION) {
+    if (data.appVersion && data.appVersion !== APP_VERSION) {
       showUpdateBanner();
     }
 
-    // 取得失敗時は現在のデータを維持（空配列で上書きしない）
-    const newRecordsJson = (rRes && rRes.value) ? rRes.value : JSON.stringify(records);
-    const newMachinesJson = (mRes && mRes.value) ? mRes.value : JSON.stringify(machines);
-    const newRH = hashStr(newRecordsJson);
-    const newMH = hashStr(newMachinesJson);
+    const newHash = hashStr(JSON.stringify({
+      records: data.records || [],
+      machines: data.machines || []
+    }));
 
-    let changed = false;
-    if (newRH !== lastRecordsHash) {
-      records = JSON.parse(newRecordsJson);
-      lastRecordsHash = newRH;
-      changed = true;
-    }
-    if (newMH !== lastMachinesHash) {
-      machines = JSON.parse(newMachinesJson);
-      lastMachinesHash = newMH;
-      changed = true;
-    }
-
-    if (changed) {
+    if (newHash !== lastDataHash) {
+      if (Array.isArray(data.records))  records  = data.records;
+      if (Array.isArray(data.machines)) machines = data.machines;
+      lastDataHash = newHash;
       renderCurrentPage();
       updateAlertBadge();
       updateSyncTime();
@@ -902,16 +889,8 @@ function doAppUpdate() {
   window.location.reload(true);
 }
 
-// init時に自分のバージョンをストレージに書き込む（最新版が起動したら更新）
-async function registerAppVersion() {
-  try {
-    const current = await window.storage.get(VERSION_KEY, true).catch(() => null);
-    // 自分のバージョンの方が新しい（または未登録）なら書き込む
-    if (!current || !current.value || current.value !== APP_VERSION) {
-      await window.storage.set(VERSION_KEY, APP_VERSION, true);
-    }
-  } catch(e) {}
-}
+// バージョン情報は saveAll 内で自動書き込みされるため個別処理不要
+async function registerAppVersion() {}
 
 function updateAlertBadge() {
   const today = new Date(); today.setHours(0,0,0,0);
