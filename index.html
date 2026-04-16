@@ -2,763 +2,1192 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d9488">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="修繕管理">
-<meta name="theme-color" content="#1a1a23">
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIua0l+a/r+W3peWgtCDkv67nuZXnrqHnkIYiLCAic2hvcnRfbmFtZSI6ICLkv67nuZXnrqHnkIYiLCAiZGVzY3JpcHRpb24iOiAi5rSX5r+v5bel5aC044Gu5qmf5qKw6Kit5YKZ5L+u57mV6KiY6Yyy566h55CG44Ki44OX44OqIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxYTFhMjMiLCAidGhlbWVfY29sb3IiOiAiIzFhMWEyMyIsICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdC1wcmltYXJ5IiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJTM0d3SEFBQUdla2xFUVZSNG5PM2RQNHRjVlJqSDhlZUdqVzRpS29RZ0NyRVFreTZOaURDRjFSU1dZbU5oYVdHUmx6Q3ZZRjVDQ2d0TEN4dXh0SmpLWWtFa1RUb05GZ1lVa1FVVmsxVUQxMktaWk4yOWMrZmNtZnVjOHp2MytYNGdFR1puWjg3ZSsvenVjODY1KzZkcDIvYTZBVUVkbUZsYmVoQkFLWmRLRHdBb2lRQWdOQUtBMEZnRElEUTZBRUlqQUFpTkFDQTAxZ0FJalE2QTBBZ0FRaU1BQ0kwMUFFS2pBeUEwQW9EUUNBQkNJd0FJalVVd1FxTURJRFFDZ05BSUFFSmpEWURRNkFBSWpRQWdOQUtBMEZnRElEUTZBRUlqQUFpTkFDQTBBb0RRV0FRak5Eb0FRaU1BQ0kwQUlEVFdBQWlORG9EUUNBQkNJd0FJalRVQVFxTURJRFFDZ05BT1NnL0F6R3cyWC94VmVnd280MmkxZktIayt6ZHQyMTR0OGNZVVBjNHJFWWFtYmRzcnVkOTBObDg4eXYyZXFNUFJhcG4xZ3B4OURVRHhvMC91K3NnYUFJb2ZLWExXU2JZQVVQd1lJbGU5TkczYkhucS95V3krZU96OUhwaW1vOVhTZFkzcTNnRW9mdXpEdTM0azdnT1ltWDExOE11Rng5NS84bXJTNTY0KytlTENZL05QUDB6NjNCdDNiMTk0N09HZCswbWZpL3BKM0FudUt2Nit4OC9xS3Y2K3g4L3FLdjYreHpHT0czZHZQLzFYV3RPMjdmTmVMejZiTDA2MlBTZWx5RGQxZ3BRaTM5UUpVZzQrbldCY2ZjZDgyN0UrV2kxZDFxcEZPMEJLOFc5NlhrcnhiM3BlNnBWSDRRb0ZYeEpUSUV6ZnRvdEpxWXNOQVVCb0JBQ2hYYkxUbndqeitnZVkyZlpGYnNLR2cwdU5GdTBBcWZ2OFhjOUwzZWZ2ZWw3cTdnNjdRTk5YZkFxMExRUjlIOThXZ3I2UGozQkZ3a0FQNzl5L2NGeTdIc3VwYWR2Mk9hOFhuODBYZjZjK2x6dkI2SE8wV3JyY3IycmF0cjNzOGNKbVpyUDU0aCt2MTBZc1I2dWx5NFc2K0JRSUtJa0FJRFFDZ05ENHpYQ29oVXVkMGdFUUdnRkFhQVFBb2JuK1NPUlBQMzdqK2ZMQTNsZ0VveFlzZ29HeEVRQ0VSZ0FRR21zQTFJSTFBREEyQW9EUUNBQkNZdzJBV3JqVXFjd3Z4MTE3L1kxM1N3K2hLTzZlNXlVMUJZcGUvR1ljZzl4a0FzQ0pmNFpqa1k5TUFJQVNXQVNqRnRPK0VjYmk3eG1PUlQ0eUFURGp4SnR4REhKcnJsMTcwMjBLZFBqU2ExNHZqV0JPL3ZqWjVYV2xPZ0NRR3dGQWFGSjNncSs4V04rVTZmR2ZQcTBaZWNoMGdCcUwzNnplY2VPVVRBQ0FFZ2dBUXBNSlFLMXo2VnJIalZOU2kyQ0tDYm5KZEFDZ0JBS0EwQWdBUWlNQUNJMEFJRFFDZ05Ca3RrSDVsb0pZVkxhODZRQUlUYVlEcUZ3UkVBc2RBS0VSQUlRbU13WHFjbkQ0Y3VraFlBUlBUbjR2UFlTTkpBTkE0VS9MK253cUJrRnVDa1R4VDVmaXVaVUtnT0lCd3JqVXpyRlVBSURjWkFLZ2RtV0FINlZ6TGJrSVB1dWRMejhxUFlSTzMzN3dlZWtoWUFReUhhQ0xhdkdiYVk4TjZhUURBSGdqQUFoTk9nREs4Mnpsc1NHZHpLOUhWOW9aZ0wraGQ0WDU5ZWlBQS9sdDBNdFhyNWNlUWhiL1B2cXQ5QkJDa3U0QVVZcmZMTmJYcWtRNkFJQTNBb0RRcEFNUWFWNGM2V3RWSXI4SXBqRGdTYm9EQU41a0FxRDQ0M0x3b1hTdVpRSUFsQ0FWQUtVckEzeW9uV09wQUpqcEhTQ01SL0hjU3U0Q3JROFUzeUEzRFlxRnZ5WVpnRFhsQTRkcGtKc0NBVGtSQUlSR0FCQWFBVUJvQkFDaFNlOEMzYnQxcy9RUU1JSzN2ditoOUJBMmtnd0FoVDh0Ni9PcEdBUzVLUkRGUDEySzUxWXFBSW9IQ09OU084ZFNBUUJ5azFrRHFGMFp6bnZsNjgvZUxqMkdWTCsrOS9GM3BjZlE1OTZ0bXpMckFUcEFncHFLMzZ5KzhaWkVBTGFvdFpocUhYZHVCQUNoRVFDRVJnQVFHZ0hZUW4xSFpaTmF4NTBiQVVoUVd6SFZOdDZTWk80RHFLT29wb2tPZ05CY0F6RGt6OXFvM0JtRXY2SG4ydXZQSTVuUkFSQ2NWQURvQXRPbmRvN2RBekMwZmFrZElJeG5sM1ByT2YweE0ydk16RHovVk9yYWtEK1p1cWIrSGFKSXMrdEZ6YnY0ajQ4Zk5Oa0NZTFpiQ0JDVGQvR2JuUVlnNnhvZ3h4ZUYrdVdzayt5TFlFS0FQcm5ybzhndUVDRkFseEoxMGF6L2syc2QwSVcxUVZ5bExvYkh4dzhhTTVIdkJhSWpvQlNwRzJGQWJrOERzRzRKd05TZHJYVTZBRUw3WHdEb0FwaTY4elZPQjBCb0Z3SkFGOEJVZGRVMkhRQ2hkUWFBTG9DcDJWVFRkQUNFdGpFQWRBRk1SVjh0OTNZQVFvRGFiYXRocGtBSWJXc0E2QUtvVlVydEpuVUFRb0RhcE5aczhoU0lFS0FXUTJwMTBCcUFFRURkMEJvZHZBZ21CRkMxUzIzdXRBdEVDS0JtMTVyY2VSdVVFRURGUHJXNDEzMEFRb0RTOXEzQnZXK0VFUUtVTWtidGpWcThKWCsxQ3VJWTg2STc2cmRDMEEzZ2Jld2FjeXRZdWdIRzVIVnhkYjlpRXdUc3czdFdrVzNLUWhBd1JLN3BkUFk1TzBGQW45enJ5S0tMVnNJQXM3S2JKM0s3Tm9SaTJ0UjJDdjhEODN3V040amo4TmNBQUFBQVNVVk9SSzVDWUlJPSIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQVIza2xFUVZSNG5PM2RNYXRjNlgzSDhYUEZkYUoxOEM1Y1RJaFFYQWpaUlNDTk1RRVZWcVBDWlVpVEltV0tGSDRKZWdWNkNTbFNwRXlSSnFSTW9XYTNFQVRqeHBEQ05pcldSaWFZaFYzalhTVlptQlJYNHp1UzdwMTc3OHc1ei85NXp1L3pBVlhMM25zMGM4N3ovODR6b3prbm04M20yeE1BRU9WMG1xWk45VUVBQUczZHFUNEFBS0E5QVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlGOEZUQUFCTElEQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFReUwwQUFDQ1FIUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tLOENCb0JBZGdBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFLNUZ3QUFCTElEQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBVHlWY0FBRU1nT0FBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlQY0NBSUJBZGdBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRTDRLR0FBQzJRRUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBamtYZ0FBRU1nT0FBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkRJVndFRFFDQTdBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUZPcXc4Z3lhTW5UMzlmZlF3QXZYdngvTm1mVkI5RGdwUE5adlBONm9OWW8vc1BIdi8rT3c5K1dIMFlBTVA3OU9VbjA2OWZmaXdLWmlZQVp1WlZQc0J5N0E3TVJ3RE13S3Q5Z0xic0NoenZaTFBaZkZCOUVLTzYvK0R4bHdZL1FKMDNJZUNGN0FFRXdJRWVQWG42WmZVeEFIRHV4Zk5uSXVDV0JNQXRlZFVQMENlN0FiY2pBRzdCcTM2QS90a051QmxmQkhSRGhqL0FHS3pYTnlNQWJzREpCREFXNi9iMUJNQTFuRVFBWTdKKzd5Y0E5bkR5QUl6Tk9uNDFBWEFGSnczQU9salBMeWNBTHVGa0FWZ1g2L3I3Qk1BN25DUUE2MlI5Zjl1ZGFabzIvcHovdWYvZ3NaTURZTVhlclBQbDg2YUhQM1lBZHZpR1A0QjFzODVmRUFCdlBIcnk5S3ZxWXdCZ2VkYjdjd0pnbXFiN0R4NDdHUUNDV1BjRndEUk50b1FBMGxqM0JZQUtCQWlWdnY2ZlZoOUF0WW9LL1BmVDMxejUzLzc2Nno5cmVDVDdQZitIZjczeXZ6MzVwNzl0ZUNUNy9may8vdVdWLysxWFAvNVp3eU1CUnBLK0MzQ3kyV3p1Vmg5RXBWWWZCdGszOUs5U0VRUDdodjVWS21KZzM5Qy9paGdBM3ZYaStiTVBxbytoU25RQTlEejh0MXBHd0NIRGY2dGxCQnd5L0xkRUFQU25laGN2TlFJRXdJS09HZnp2V2pJRWpobjg3MW95Qkk0Wi9POFNBbER2TnRmMGt0ZXNBQWh6LzhIanI1WjgvMmZPNGIrMVJBVE1PZnkzbG9pQU9ZZi9sZ2lBR3IzdDRuMzY4cFBwMXk4L2pvdUEySDhGTU5yd1grTG5Makg4bC9pNVN3ei9KWDh1Y0xWanI3c2xydHZVRHdNbTN3c0FnSWJtR3Q0THhYdjFUSEl2Z05FdDllcC83cCsvMUt2L3VYLyswcS9TN1FKQUczTmZhNjdkNHdtQUdTMDkvT2Y2UFVzUC83bCtUNnNMM0VJQ0pJb01nRWRQbnI2dVBnYUFGQ044amlkeExrUUdBQUNrRXdBemFiWDlmK3p2YTdYOWYrenZhNzB0NzIwQVdJYlA4ZlJMQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVDZzA4blg0Z0xBTklYTlF6c0FNMW55ZHIxei9yNGxiOWM3NSs5cmZhYytkd2FFWlN4OWJibDJEeWNBQUNDUUFBQmdVVXU5U3ZmcS96Z0NZRWF0M2dZNDl2ZTBlaHZnMk4vVDZ1SzJpQUNKQk1ETWxvNkF1WDcrMGhFdzE4LzMvaUdzdzl6WG1tdjNlQUlBZ0NibUd0cUcvendFd0FLVzJnV1krK2N1dFFzdzk4LzEvaUdzeDdIWG5ldDJQZ0pnSVhNUDY2V2lZdTVodlZSVTJENkU5ZmpWajM5MjYydndrUCtIL1U0Mm04MGZWUjlFYTQrZVBQMmZsci92bUZzRnQveCtnV051RmR6eSt3V091ZjJuQlFUNnMrK2Fibm5Odm5qKzdJK2IvYklPQ0lCR0RvbUExbDh1TkUySFJVRHJMeGVhcHNNaXdQQUg5aEVBQVNvQ1lOZStHS2dZK2xmWkZ3TVZRLzhxdmJ4NkFNYVdHQURmcUQ2STFoNDllZnEvMWNjQVFGOWVQSDhXOVlMWWh3QUJJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUtmVE5HMnFEd0lBT2hBMUQrMEFBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlGT3F3K2d3cWN2UDZrK0JBQW81VjRBQUhBdWFoNTZDd0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSTVLdUFBZUJjMUR5MEF3QUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVNaTlBQURnWE5ROHRBTUFBSUVFQUFBRUVnQUFFRWdBQUVDZzArb0RZSnErOCtDSDFZY0FlMzM2OHBQcVF3Qm1KZ0FLR2Z5TVludXVDZ0ZZRDI4QkZESDhHWkh6RnRaREFCU3dpREl5NXkrc2d3Qm96T0xKR2ppUFlYd0NBQUFDM1puT3Yvb3c3VThKcjVwWUUrY3pLMVE5bTVyK3NRTUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVJBUTc1R2xUVnhQc1BZQkFBQUJCSUFqWG5WeEJvNGoyRjhBcUNBeFpPUk9YOWhIUVJBRVlzb0kzTGV3bnFjbkowOUxQdHEzQ3AzUDd4WGZRaHY4WldxOU03Z0o4SHJMMTVWSDBKVHA5VUhnTVVWZ1BhOEJRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFOGxYQWhUNzRWbC8zSkdBZVgvMHU2L3ZFZ1RIWkFTaGkrSytYNXhZWWdRQW9ZRUNzbitjWTZKMEFhTXhneU9HNUJub21BQm95RVBKNHpvRmVDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpnSVo4UVV3ZXp6blFLd0hRbUlHUXczTU45RXdBRkRBWTFzOXpEUFJPQUJReElOYkxjd3VNd00yQUNoa1VBRlN4QXdBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRU9xMCtnQ1FmZk90ZTlTRUFkTzJyMzcycVBvUVlkZ0FBSUpBZGdJYVVMUUM5c0FNQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJRGNER3NqcDNZK3FEd0ZncjY5ZmYxNTlDTnlRQU9pY29RK01aSGZORWdOOUV3Q2RNdmlCMFczWE1TSFFKd0hRR1lNZldCc2gwQ2NmQXV5STRRK3NtVFd1THdLZ0V5NE1JSUcxcmg4Q29BTXVDQ0NKTmE4UEFxQ1lDd0ZJWk8yckp3QUt1UUNBWk5iQVdnS2dpQk1md0ZwWVNRQUFRQ0FCVUVEeEFseXdKdFlRQUFBUVNBQTBwblFCM21kdGJFOEFBRUFnQVFBQWdkd01xS0c1dDdqKzZ0LytidGFmeCszODU5LzhTL1Vod0txYzN2M0lEWU1hT2prN2U3aXBQb2pXN241NHIrVDN6aFVBQm45ZmhBRE1weklBWG4veHF1eDNWL0FXd0dBTS8vNTRUb0FSQ1lDQkdEVDk4dHdBb3hFQUFCQklBQXpDSzh6K2VZNkFrUWdBQUFna0FBQWdrQUFBZ0VBQ1lCRCtyWG4vUEVmQVNBUUFBQVFTQUFQeENyTmZuaHRnTkFKZ01BWk5mendud0lqY0M2QWhOd05hRjRNZjV1ZGVBTzBJZ0libURnQ0F0UkVBN1hnTEFBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBcDlVSHdHRys4YzF2Vng4Q0svUi9YLzYyK2hDQVJnVEFZQXgrbHJROXY0UUFySiszQUFaaStOT0tjdzNXVHdBQVFDQUJNQWl2eUdqTk9RZnJKZ0FBSUpBQUFJQkFBZ0FBQWdtQVFmaG5XYlRtbklOMUV3QUFFRWdBRE1Rck1scHhyc0g2K1NiQXdXd1hadjlFaXlVWS9KQkRBRFQwOWV2UHA5TzdIODN5c3l6VXdOcDgvZnJ6NmtPSTRpMEFBQWdrQUFBZ2tBQm96QllYd1B1c2plMEpBQUFJSkFBS0tGMkFDOWJFR2dJQUFBSUpnQ0tLRjhCYVdFa0FGSExpQThtc2diVUVRREVYQUpESTJsZFBBSFRBaFFBa3NlYjFRUUIwd2dVQkpMRFc5VU1BZE1TRkFheVpOYTR2YmdiVW1lMEZNdGROZ3dDcUdmeDlFZ0NkRWdMQTZBeit2Z21BenUxZVFHSUE2SjJoUHc0Qk1CQVhGZ0J6OFNGQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDRFFhZlVCY0hNLy9kNTNxdzhCWUsvdi8vd1gxWWZBRFFtQXpobjZ3RWgyMXl3eDBEY0IwQ21ESHhqZGRoMFRBbjBTQUoweCtJRzFFUUo5OGlIQWpoait3SnBaNC9vaUFEcmh3Z0FTV092NklRQTY0SUlBa2xqeitpQUFpcmtRZ0VUV3Zub0NvSkFMQUVobURhd2xBSW80OFFHc2haVUVBQUFFRWdBRkZDL0FCV3RpRFFFQUFJRUVRR05LRitCOTFzYjJCQUFBQkhJdkFOampULy9qbjM5UWZRd2M3cjkvOVBjL3FUNEc2TlhKMmRuRFRmVkJ0SGIzdzNzbHY5Y1cxemdNL25VUkF1T292R0hRNnk5ZWxmM3VDdDRDZ0hjWS91dmpPWVgzQ1FEWVlWQ3NsK2NXM2lZQTRBMERZdjA4eDNCQkFNQmtNQ1R4WE1PNXlBQkkrNkFIQVBzbHpvWElBSUJkWGhIbThaeURBQUNBU0FJQUFBSUpBQUFJRkJzQWlSLzRBT0I5cWZNZ05nQUFJRmwwQUtSV0h3RG5rdWRBZEFEQU5MbFJUQ0xQT1FnQUFJaDA1N1BQZm5sU2ZSQ1ZrcmQvdU9BVllRN1BOVnZKNi85bm4vM3l4QTRBdkdFd3JKL25HQzRJZ0NtN0FubWJBYkZlbmx0MldmY0Z3Qjg0R2RneUtOYkhjOG91Ni8yNTArb0RnQjV0QjRhYnhvek40SWVyblV6VE5KMmRQZHhVSDBndjduNTRiOUdmLzlQdmZYZlJudzh3cXUvLy9CZUwvdzZ2L3MvNUVPQWxuQndBNjJSOWY1c0F1SVNUQkdCZHJPdnZ1ek5ONTFzQjFRZlNtNlZPbGhaYlhBQ2pXWEp0TlB6ZnRwMzVkZ0QyY05JQWpNMDZmalVCY0kwbFRoNjdBQUFYbGxvVERmLzlCTUFOT0lrQXhtTGR2cDRBdUtHNVR5YTdBQURMcklXRy84MzhJUUI4RVBCNklnQmdQb1ovZTd1ejNnN0FMYjMrNHRXc0o1Z0lBQkxOdmZiTnZUWW5FQUFIRWdFQWgxbGkrSE43QXVBSWN4YW5DQUFTekxuV2VkVi9uUGZlOTNkZmdPTWNleThCOXdvQTFtcU80Vy9nSCs3ZHovb0pnSVVJQVlCekJuOGZCRUNoUTZKQUNBQ2pPblR3Ry9iTEVBQUQrNjhmUEs0K0JJQzkvdUluSDFjZkFsZTROZ0NtU1FRQXdKcGM5bDAvL2hVQUFBUVNBQUFRNk5JQThMWEFBTEFPVjgxME93QUFFRWdBQUVDZ0t3UEEyd0FBTUxaOXM5d09BQUFFRWdBQUVHaHZBSGdiQUFER2ROME10d01BQUlHdURRQzdBQUF3bHB2TWJqc0FBQkJJQUFCQW9Cc0ZnTGNCQUdBTU41M1pkZ0FBSU5DTkE4QXVBQUQwN1RhejJnNEFBQVM2VlFEWUJRQ0FQdDEyUnRzQkFJQkF0dzRBdXdBQTBKZERack1kQUFBSWRGQUEyQVVBZ0Q0Y09wUHRBQUJBb0lNRHdDNEFBTlE2WmhZZnRRTWdBZ0NneHJFejJGc0FBQkRvNkFDd0N3QUFiYzB4ZSswQUFFQ2dXUUxBTGdBQXRESFh6SjF0QjBBRUFNQ3k1cHkxM2dJQWdFQ3pCb0JkQUFCWXh0d3pkdllkQUJFQUFQTmFZcll1OGhhQUNBQ0FlU3cxVTMwR0FBQUNMUllBZGdFQTREaEx6dEpGZHdCRUFBQWNadWtadXZoYkFDSUFBRzZueGV6MEdRQUFDTlFrQU93Q0FNRE50SnFaelhZQVJBQUE3TmR5VmpaOUMwQUVBTURsV3MvSTVwOEJFQUVBOExhSzJWanlJVUFSQUFEbnFtWmkyYjhDRUFFQXBLdWNoYVgvREZBRUFKQ3FlZ2FXZnc5QTlRTUFBSzMxTVB2S0EyQ2ErbmdnQUtDRlhtWmVGd0V3VGYwOElBQ3dsSjVtWFRjQk1FMTlQVEFBTUtmZVpseFhBVEJOL1QxQUFIQ3NIbWRiZHdFd1RYMCtVQUJ3aUY1bldwY0JNRTM5UG1BQWNGTTl6N0p1QTJDYStuN2dBR0NmM21kWTF3RXdUZjAvZ0FEd3JoRm1WL2NIdU92czdPR20raGdBNENvakRQNnQ3bmNBZG8zMHdBS1FaYlFaTlZRQVROTjREekFBNnpmaWJCcnVnSGQ1U3dDQVNpTU8vcTNoZGdCMmpmekFBekMyMFdmUTBBRXdUZU0vQVFDTVp3MnpaL2kvd0M1dkNRQ3dwRFVNL3EzaGR3QjJyZW1KQWFBdmE1c3hxL3JMN0xJYkFNQWMxamI0dDFiNWw5b2xCQUE0eEZvSC85YXEzZ0s0ek5xZlFBRG1sekE3VnY4WDNHVTNBSUI5RWdiL1ZzeGZkSmNRQUdCWDB1RGZpdnNMN3hJQ0FOa1NCLzlXN0Y5OGx4QUF5Skk4K0xmaUg0QmRRZ0JnM1F6K0N4NklLNGdCZ0hVdzlDL25RYm1HRUFBWWs4Ry9ud2ZuRnNRQVFOOE0vWnZ6UUIxSURBRDB3ZEEvakFkdEJtSUFvQzFELzNnZXdBVUlBb0I1R2Zqejg0QTJJQWdBYnNmQVg1NEh1SWdvQURobjJOZndvSGRLSUFCclljRDM2ZjhCQ1N4V29XQVlnUW9BQUFBQVNVVk9SSzVDWUlJPSIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn1dfQ==">
-<link rel="apple-touch-icon" href="data:image/png;base64,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">
-<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,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">
-<link rel="icon" type="image/png" sizes="512x512" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAR3klEQVR4nO3dMatc6X3H8XPFdaJ18C5cTIhQXAjZRSCNMQEVVqPCZUiTImWKFH4JegV6CSlSpEyRJqRMoWa3EATjxpDCNirWRiaYhV3jXSVZmBRX4zuS7p1778w5z/95zu/zAVXL3ns0c87z/84zozknm83m2xMAEOV0mqZN9UEAAG3dqT4AAKA9AQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIF8FTAABLIDAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQyL0AACCQHQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkK8CBoBAdgAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAK5FwAABLIDAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAATyVcAAEMgOAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIPcCAIBAdgAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQL4KGAAC2QEAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAjkXgAAEMgOAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABDIVwEDQCA7AAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIFOqw8gyaMnT39ffQwAvXvx/NmfVB9DgpPNZvPN6oNYo/sPHv/+Ow9+WH0YAMP79OUn069ffiwKZiYAZuZVPsBy7A7MRwDMwKt9gLbsChzvZLPZfFB9EKO6/+DxlwY/QJ03IeCF7AEEwIEePXn6ZfUxAHDuxfNnIuCWBMAtedUP0Ce7AbcjAG7Bq36A/tkNuBlfBHRDhj/AGKzXNyMAbsDJBDAW6/b1BMA1nEQAY7J+7ycA9nDyAIzNOn41AXAFJw3AOljPLycALuFkAVgX6/r7BMA7nCQA62R9f9udaZo2/pz/uf/gsZMDYMXerPPl86aHP3YAdviGP4B1s85fEABvPHry9KvqYwBgedb7cwJgmqb7Dx47GQCCWPcFwDRNtoQA0lj3BYAKBAiVvv6fVh9AtYoK/PfT31z53/766z9reCT7Pf+Hf73yvz35p79teCT7/fk//uWV/+1XP/5ZwyMBRpK+C3Cy2WzuVh9EpVYfBtk39K9SEQP7hv5VKmJg39C/ihgA3vXi+bMPqo+hSnQA9Dz8t1pGwCHDf6tlBBwy/LdEAPSnehcvNQIEwIKOGfzvWjIEjhn871oyBI4Z/O8SAlDvNtf0ktesAAhz/8Hjr5Z8/2fO4b+1RATMOfy3loiAOYf/lgiAGr3t4n368pPp1y8/jouA2H8FMNrwX+LnLjH8l/i5Swz/JX8ucLVjr7slrtvUDwMm3wsAgIbmGt4LxXv1THIvgNEt9ep/7p+/1Kv/uX/+0q/S7QJAG3Nfa67d4wmAGS09/Of6PUsP/7l+T6sL3EICJIoMgEdPnr6uPgaAFCN8jidxLkQGAACkEwAzabX9f+zva7X9f+zva70t720AWIbP8fRLAABAIAEAAIEEAAAEEgAAEEgAAECg08nX4gLANIXNQzsAM1nydr1z/r4lb9c75+9rfac+dwaEZSx9bbl2DycAACCQAABgUUu9Svfq/zgCYEat3gY49ve0ehvg2N/T6uK2iACJBMDMlo6AuX7+0hEw18/3/iGsw9zXmmv3eAIAgCbmGtqG/zwEwAKW2gWY++cutQsw98/1/iGsx7HXnet2PgJgIXMP66WiYu5hvVRU2D6E9fjVj39262vwkP+H/U42m80fVR9Ea4+ePP2flr/vmFsFt/x+gWNuFdzy+wWOuf2nBQT6s++abnnNvnj+7I+b/bIOCIBGDomA1l8uNE2HRUDrLxeapsMiwPAH9hEAASoCYNe+GKgY+lfZFwMVQ/8qvbx6AMaWGADfqD6I1h49efq/1ccAQF9ePH8W9YLYhwABIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQKfTNG2qDwIAOhA1D+0AAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIFOqw+gwqcvP6k+BAAo5V4AAHAuah56CwAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAI5KuAAeBc1Dy0AwAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEMi9AADgXNQ8tAMAAIEEAAAEEgAAEEgAAECg0+oDYJq+8+CH1YcAe3368pPqQwBmJgAKGfyMYnuuCgFYD28BFDH8GZHzFtZDABSwiDIy5y+sgwBozOLJGjiPYXwCAAAC3ZnOv/ow7U8Jr5pYE+czK1Q9m5r+sQMAAIEEAAAEEgAAEEgAAEAgAQAAgQRAQ75GlTVxPsPYBAAABBIAjXnVxBo4j2F8AqCAxZOROX9hHQRAEYsoI3LewnqcnJ09LPtq3Cp3P7xXfQhv8ZWq9M7gJ8HrL15VH0JTp9UHgMUVgPa8BQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAE8lXAhT74Vl/3JGAeX/0u6/vEgTHZAShi+K+X5xYYgQAoYECsn+cY6J0AaMxgyOG5BnomABoyEPJ4zoFeCQAACCQAACCQAACAQAIAAAIJgIZ8QUwezznQKwHQmIGQw3MN9EwAFDAY1s9zDPROABQxINbLcwuMwM2AChkUAFSxAwAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIAEAAIEEAAAEOq0+gCQffOte9SEAdO2r372qPoQYdgAAIJAdgIaULQC9sAMAAIEEAAAEEgAAEEgAAEAgAQAAgQQAAAQSAAAQSAAAQCABAACBBAAABBIAABBIAABAIDcDGsjp3Y+qDwFgr69ff159CNyQAOicoQ+MZHfNEgN9EwCdMviB0W3XMSHQJwHQGYMfWBsh0CcfAuyI4Q+smTWuLwKgEy4MIIG1rh8CoAMuCCCJNa8PAqCYCwFIZO2rJwAKuQCAZNbAWgKgiBMfwFpYSQAAQCABUEDxAlywJtYQAAAQSAA0pnQB3mdtbE8AAEAgAQAAgdwMqKG5t7j+6t/+btafx+3859/8S/UhwKqc3v3IDYMaOjk7e7ipPojW7n54r+T3zhUABn9fhADMpzIAXn/xqux3V/AWwGAM//54ToARCYCBGDT98twAoxEAABBIAAzCK8z+eY6AkQgAAAgkAAAgkAAAgEACYBD+rXn/PEfASAQAAAQSAAPxCrNfnhtgNAJgMAZNfzwnwIjcC6AhNwNaF4Mf5udeAO0IgIbmDgCAtREA7XgLAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAp9UHwGG+8c1vVx8CK/R/X/62+hCARgTAYAx+lrQ9v4QArJ+3AAZi+NOKcw3WTwAAQCABMAivyGjNOQfrJgAAIJAAAIBAAgAAAgmAQfhnWbTmnIN1EwAAEEgADMQrMlpxrsH6+SbAwWwXZv9EiyUY/JBDADT09evPp9O7H83ysyzUwNp8/frz6kOI4i0AAAgkAAAgkABozBYXwPusje0JAAAIJAAKKF2AC9bEGgIAAAIJgCKKF8BaWEkAFHLiA8msgbUEQDEXAJDI2ldPAHTAhQAkseb1QQB0wgUBJLDW9UMAdMSFAayZNa4vbgbUme0FMtdNgwCqGfx9EgCdEgLA6Az+vgmAzu1eQGIA6J2hPw4BMBAXFgBz8SFAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACDQafUBcHM//d53qw8BYK/v//wX1YfADQmAzhn6wEh21ywx0DcB0CmDHxjddh0TAn0SAJ0x+IG1EQJ98iHAjhj+wJpZ4/oiADrhwgASWOv6IQA64IIAkljz+iAAirkQgETWvnoCoJALAEhmDawlAIo48QGshZUEAAAEEgAFFC/ABWtiDQEAAIEEQGNKF+B91sb2BAAABHIvANjjT//jn39QfQwc7r9/9Pc/qT4G6NXJ2dnDTfVBtHb3w3slv9cW1zgM/nURAuOovGHQ6y9elf3uCt4CgHcY/uvjOYX3CQDYYVCsl+cW3iYA4A0DYv08x3BBAMBkMCTxXMO5yABI+6AHAPslzoXIAIBdXhHm8ZyDAACASAIAAAIJAAAIFBsAiR/4AOB9qfMgNgAAIFl0AKRWHwDnkudAdADANLlRTCLPOQgAAIh057PPfnlSfRCVkrd/uOAVYQ7PNVvJ6/9nn/3yxA4AvGEwrJ/nGC4IgCm7AnmbAbFenlt2WfcFwB84GdgyKNbHc8ou6/250+oDgB5tB4abxozN4IernUzTNJ2dPdxUH0gv7n54b9Gf/9PvfXfRnw8wqu///BeL/w6v/s/5EOAlnBwA62R9f5sAuISTBGBdrOvvuzNN51sB1QfSm6VOlhZbXACjWXJtNPzftp35dgD2cNIAjM06fjUBcI0lTh67AAAXlloTDf/9BMANOIkAxmLdvp4AuKG5Tya7AADLrIWG/838IQB8EPB6IgBgPoZ/e7uz3g7ALb3+4tWsJ5gIABLNvfbNvTYnEAAHEgEAh1li+HN7AuAIcxanCAASzLnWedV/nPfe93dfgOMcey8B9woA1mqO4W/gH+7dz/oJgIUIAYBzBn8fBEChQ6JACACjOnTwG/bLEAAD+68fPK4+BIC9/uInH1cfAle4NgCmSQQAwJpc9l0//hUAAAQSAAAQ6NIA8LXAALAOV810OwAAEEgAAECgKwPA2wAAMLZ9s9wOAAAEEgAAEGhvAHgbAADGdN0MtwMAAIGuDQC7AAAwlpvMbjsAABBIAABAoBsFgLcBAGAMN53ZdgAAINCNA8AuAAD07Taz2g4AAAS6VQDYBQCAPt12RtsBAIBAtw4AuwAA0JdDZrMdAAAIdFAA2AUAgD4cOpPtAABAoIMDwC4AANQ6ZhYftQMgAgCgxrEz2FsAABDo6ACwCwAAbc0xe+0AAECgWQLALgAAtDHXzJ1tB0AEAMCy5py13gIAgECzBoBdAABYxtwzdvYdABEAAPNaYrYu8haACACAeSw1U30GAAACLRYAdgEA4DhLztJFdwBEAAAcZukZuvhbACIAAG6nxez0GQAACNQkAOwCAMDNtJqZzXYARAAA7NdyVjZ9C0AEAMDlWs/I5p8BEAEA8LaK2VjyIUARAADnqmZi2b8CEAEApKuchaX/DFAEAJCqegaWfw9A9QMAAK31MPvKA2Ca+nggAKCFXmZeFwEwTf08IACwlJ5mXTcBME19PTAAMKfeZlxXATBN/T1AAHCsHmdbdwEwTX0+UABwiF5nWpcBME39PmAAcFM9z7JuA2Ca+n7gAGCf3mdY1wEwTf0/gADwrhFmV/cHuOvs7OGm+hgA4CojDP6t7ncAdo30wAKQZbQZNVQATNN4DzAA6zfibBrugHd5SwCASiMO/q3hdgB2jfzAAzC20WfQ0AEwTeM/AQCMZw2zZ/i/wC5vCQCwpDUM/q3hdwB2remJAaAva5sxq/rL7LIbAMAc1jb4t1b5l9olBAA4xFoH/9aq3gK4zNqfQADmlzA7Vv8X3GU3AIB9Egb/VsxfdJcQAGBX0uDfivsL7xICANkSB/9W7F98lxAAyJI8+LfiH4BdQgBg3Qz+Cx6IK4gBgHUw9C/nQbmGEAAYk8G/nwfnFsQAQN8M/ZvzQB1IDAD0wdA/jAdtBmIAoC1D/3gewAUIAoB5Gfjz84A2IAgAbsfAX54HuIgoADhn2NfwoHdKIABrYcD36f8BCSxWoWAYgQoAAAAASUVORK5CYII=">
-<title>洗濯工場 修繕管理</title>
-
+<title>修繕管理 - 洗濯工場</title>
+<link rel="manifest" href="#" id="manifest-link">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg: #ffffff;
-  --bg2: #f5f5f3;
-  --bg3: #eeede9;
-  --text: #1a1a18;
-  --text2: #6b6b67;
-  --text3: #9b9b97;
-  --border: rgba(0,0,0,0.1);
-  --border2: rgba(0,0,0,0.18);
-  --radius: 10px;
-  --radius-lg: 14px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1c1c1e;
-    --bg2: #2c2c2e;
-    --bg3: #3a3a3c;
-    --text: #f2f2f7;
-    --text2: #aeaeb2;
-    --text3: #636366;
-    --border: rgba(255,255,255,0.1);
-    --border2: rgba(255,255,255,0.18);
+    --teal-50: #f0fdfa; --teal-100: #ccfbf1; --teal-200: #99f6e4;
+    --teal-500: #14b8a6; --teal-600: #0d9488; --teal-700: #0f766e;
+    --teal-800: #115e59; --teal-900: #134e4a;
+    --bg: #f8fafc; --bg2: #ffffff; --bg3: #f1f5f9;
+    --text: #0f172a; --text2: #475569; --text3: #94a3b8;
+    --border: #e2e8f0; --border2: #cbd5e1;
+    --shadow: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -1px rgba(0,0,0,.05);
+    --radius: 12px; --radius-sm: 8px;
+    --red: #ef4444; --amber: #f59e0b; --green: #10b981; --blue: #3b82f6;
   }
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; overscroll-behavior: none; }
-input, select, textarea, button { font-family: inherit; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --text: #f1f5f9; --text2: #94a3b8; --text3: #475569;
+      --border: #334155; --border2: #475569;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 80px; }
 
-/* ── Nav bar ── */
-.topbar { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 12px 16px 10px; display: flex; align-items: center; justify-content: space-between; }
-.topbar-title { font-size: 17px; font-weight: 600; color: var(--text); }
-.topbar-sub { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
-.online-dot { width: 6px; height: 6px; border-radius: 50%; background: #34c759; flex-shrink: 0; }
+  /* Header */
+  .header { background: var(--teal-600); color: white; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .header h1 { font-size: 17px; font-weight: 700; }
+  .header-btns { display: flex; gap: 8px; }
+  .btn-icon { background: rgba(255,255,255,.2); border: none; color: white; border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  .btn-icon:hover { background: rgba(255,255,255,.3); }
 
-/* ── Bottom tab bar ── */
-.tabbar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-top: 0.5px solid var(--border); display: flex; padding-bottom: var(--safe-bottom); }
-.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px 6px; cursor: pointer; border: none; background: none; color: var(--text3); font-size: 10px; gap: 3px; }
-.tab-item.active { color: #007aff; }
-.tab-icon { font-size: 22px; line-height: 1; }
-.tab-label { font-size: 10px; }
+  /* Bottom Nav */
+  .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: var(--bg2); border-top: 1px solid var(--border); display: flex; z-index: 100; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; cursor: pointer; color: var(--text3); font-size: 10px; gap: 2px; border: none; background: none; }
+  .nav-item.active { color: var(--teal-600); }
+  .nav-item svg { width: 20px; height: 20px; }
 
-/* ── Pages ── */
-.page { display: none; padding: 12px 12px calc(70px + var(--safe-bottom)); min-height: 100vh; }
-.page.active { display: block; }
+  /* Pages */
+  .page { display: none; padding: 16px; }
+  .page.active { display: block; }
 
-/* ── Cards ── */
-.card { background: var(--bg); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px; border: 0.5px solid var(--border); }
-.card-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; }
+  /* Cards */
+  .card { background: var(--bg2); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 12px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 
-/* ── Metrics ── */
-.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-.metric-card { background: var(--bg); border-radius: var(--radius-lg); padding: 14px; border: 0.5px solid var(--border); }
-.metric-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
-.metric-value { font-size: 26px; font-weight: 700; color: var(--text); }
-.metric-value.danger { color: #ff3b30; }
+  /* Stats Grid */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .stat-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--teal-600); }
+  .stat-unit { font-size: 11px; color: var(--text2); margin-left: 2px; }
 
-/* ── List items ── */
-.list-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
-.list-item:last-child { border-bottom: none; }
-.list-item:active { opacity: 0.7; }
-.list-meta { flex: 1; min-width: 0; }
-.list-title { font-size: 14px; font-weight: 500; color: var(--text); display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-bottom: 3px; }
-.list-sub { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.list-right { text-align: right; font-size: 11px; color: var(--text2); flex-shrink: 0; }
+  /* Badges */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+  .badge-wash { background: #dbeafe; color: #1d4ed8; }
+  .badge-dry { background: #fef9c3; color: #a16207; }
+  .badge-press { background: #fce7f3; color: #be185d; }
+  .badge-conv { background: #dcfce7; color: #166534; }
+  .badge-other { background: #f1f5f9; color: #475569; }
+  .badge-done { background: #dcfce7; color: #166534; }
+  .badge-inprog { background: #fef9c3; color: #a16207; }
+  .badge-todo { background: #fee2e2; color: #b91c1c; }
+  .badge-pend { background: #f1f5f9; color: #475569; }
+  .badge-high { background: #fee2e2; color: #b91c1c; }
+  .badge-mid { background: #fef9c3; color: #a16207; }
+  .badge-low { background: #dcfce7; color: #166534; }
 
-/* ── Badges ── */
-.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
-.b-wash { background: #dbeeff; color: #0a4c8a; }
-.b-dry { background: #fff0d0; color: #7a4a00; }
-.b-press { background: #ffe8f0; color: #8a1a44; }
-.b-conv { background: #e0f5e0; color: #1a5c1a; }
-.b-open { background: #ffe0de; color: #9a1a1a; }
-.b-done { background: #e0f5e0; color: #1a5c1a; }
-.b-prog { background: #fff0d0; color: #7a4a00; }
+  /* Record items */
+  .record-item { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); margin-bottom: 8px; cursor: pointer; transition: all .15s; }
+  .record-item:hover { border-color: var(--teal-500); box-shadow: 0 0 0 2px rgba(20,184,166,.15); }
+  .record-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .record-name { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; }
+  .record-meta { display: flex; gap: 8px; font-size: 11px; color: var(--text2); align-items: center; }
+  .record-desc { font-size: 12px; color: var(--text2); line-height: 1.5; margin-top: 4px; }
 
-/* ── Forms ── */
-.form-group { margin-bottom: 14px; }
-.form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; display: block; }
-.form-control { width: 100%; background: var(--bg2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 12px; font-size: 15px; color: var(--text); outline: none; -webkit-appearance: none; appearance: none; }
-.form-control:focus { border-color: #007aff; box-shadow: 0 0 0 3px rgba(0,122,255,0.15); }
-textarea.form-control { min-height: 80px; resize: vertical; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.form-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  /* Forms */
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(20,184,166,.15); }
+  textarea { resize: vertical; min-height: 80px; }
 
-/* ── Buttons ── */
-.btn { border: none; border-radius: var(--radius); padding: 12px 20px; font-size: 15px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-.btn:active { transform: scale(0.97); }
-.btn-primary { background: #007aff; color: #fff; }
-.btn-secondary { background: var(--bg2); color: var(--text); border: 0.5px solid var(--border2); }
-.btn-danger { background: #ff3b30; color: #fff; }
-.btn-full { width: 100%; }
+  /* Buttons */
+  .btn { padding: 10px 16px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 14px; font-weight: 600; font-family: inherit; transition: all .15s; }
+  .btn-primary { background: var(--teal-600); color: white; width: 100%; }
+  .btn-primary:hover { background: var(--teal-700); }
+  .btn-secondary { background: var(--bg3); color: var(--text); }
+  .btn-danger { background: #fee2e2; color: var(--red); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
 
-/* ── Suggest dropdown ── */
-.suggest-wrap { position: relative; }
-.suggest-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); z-index: 200; max-height: 220px; overflow-y: auto; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
-.suggest-list.open { display: block; }
-.suggest-section { padding: 6px 12px 3px; font-size: 11px; font-weight: 600; color: var(--text2); background: var(--bg2); text-transform: uppercase; letter-spacing: 0.04em; }
-.suggest-row { padding: 10px 14px; cursor: pointer; border-bottom: 0.5px solid var(--border); }
-.suggest-row:last-child { border-bottom: none; }
-.suggest-row:active { background: var(--bg2); }
-.suggest-name { font-size: 14px; color: var(--text); }
-.suggest-detail { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  /* Filter bar */
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
+  .filter-bar::-webkit-scrollbar { height: 3px; }
+  .filter-btn { flex-shrink: 0; padding: 6px 12px; border-radius: 100px; border: 1px solid var(--border2); background: var(--bg2); color: var(--text2); font-size: 12px; cursor: pointer; }
+  .filter-btn.active { background: var(--teal-600); color: white; border-color: var(--teal-600); }
 
-/* ── Selected machine chip ── */
-.machine-chip { margin-top: 8px; background: var(--bg2); border-radius: var(--radius); padding: 10px 12px; display: none; }
-.machine-chip-label { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
-.machine-chip-name { font-size: 14px; font-weight: 500; color: var(--text); }
-.machine-chip-detail { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  /* Period filter */
+  .period-filter { display: flex; gap: 6px; margin-bottom: 12px; }
+  .period-btn { flex: 1; padding: 7px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--bg2); color: var(--text2); font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
+  .period-btn.active { background: var(--teal-600); color: white; border-color: var(--teal-600); }
 
-/* ── Alert items ── */
-.alert-card { background: var(--bg); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; border-left: 4px solid #ccc; cursor: pointer; }
-.alert-card:active { opacity: 0.7; }
-.alert-card.urgent { border-left-color: #ff3b30; }
-.alert-card.warn { border-left-color: #ff9500; }
-.alert-card.ok { border-left-color: #34c759; }
-.alert-title { font-size: 13px; font-weight: 500; color: var(--text); }
-.alert-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  /* Alert items */
+  .alert-item { padding: 10px 12px; border-radius: var(--radius-sm); margin-bottom: 8px; border-left: 3px solid; }
+  .alert-red { background: #fff5f5; border-color: var(--red); }
+  .alert-amber { background: #fffbeb; border-color: var(--amber); }
+  .alert-green { background: #f0fdf4; border-color: var(--green); }
+  @media (prefers-color-scheme: dark) {
+    .alert-red { background: #2d1515; } .alert-amber { background: #2d2310; } .alert-green { background: #0f2d1a; }
+  }
+  .alert-title { font-weight: 600; font-size: 13px; }
+  .alert-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-/* ── Bar chart ── */
-.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-.bar-label { font-size: 12px; color: var(--text2); width: 56px; text-align: right; flex-shrink: 0; }
-.bar-track { flex: 1; background: var(--bg2); border-radius: 4px; height: 20px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 7px; font-size: 11px; font-weight: 600; min-width: 28px; }
-.bf-wash { background: #b5d4f4; color: #0c447c; }
-.bf-dry  { background: #fac775; color: #633806; }
-.bf-press{ background: #f4c0d1; color: #72243e; }
-.bf-conv { background: #c0dd97; color: #275009; }
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg2); border-radius: 20px 20px 0 0; padding: 20px 16px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+  .modal-handle { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .detail-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; }
+  .detail-label { font-size: 11px; color: var(--text2); min-width: 80px; padding-top: 2px; }
+  .detail-value { font-size: 13px; font-weight: 500; flex: 1; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
 
-/* ── Section header ── */
-.section-header { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 12px; padding-top: 4px; }
+  /* Machine cards */
+  .machine-card { background: var(--bg2); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; transition: all .15s; }
+  .machine-card:hover { border-color: var(--teal-500); box-shadow: 0 0 0 2px rgba(20,184,166,.15); }
+  .machine-header { display: flex; align-items: center; gap: 10px; }
+  .machine-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .machine-info { flex: 1; min-width: 0; }
+  .machine-name { font-weight: 700; font-size: 15px; }
+  .machine-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .machine-stats { display: flex; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .machine-stat { text-align: center; flex: 1; }
+  .machine-stat-val { font-size: 16px; font-weight: 700; color: var(--teal-600); }
+  .machine-stat-lbl { font-size: 10px; color: var(--text2); }
 
-/* ── Filter bar ── */
-.filter-bar { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-.filter-bar select, .filter-bar input { background: var(--bg); border: 0.5px solid var(--border2); border-radius: 20px; padding: 6px 12px; font-size: 13px; color: var(--text); outline: none; -webkit-appearance: none; appearance: none; flex-shrink: 0; }
-.filter-bar input { flex: 1; min-width: 100px; }
+  /* Section Header */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .section-title { font-size: 15px; font-weight: 700; }
 
-/* ── Master list ── */
-.master-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
-.master-item:last-child { border-bottom: none; }
-.master-info { flex: 1; min-width: 0; }
-.master-name { font-size: 14px; font-weight: 500; color: var(--text); }
-.master-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
-.master-right { text-align: right; font-size: 11px; color: var(--text2); flex-shrink: 0; margin-right: 8px; }
-.edit-btn { background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 8px; padding: 5px 10px; font-size: 12px; color: var(--text2); cursor: pointer; }
-.edit-btn:active { opacity: 0.7; }
+  /* Search */
+  .search-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 14px; margin-bottom: 10px; }
+  .search-input:focus { outline: none; border-color: var(--teal-500); }
 
-/* ── Bottom Sheet Modal ── */
-.sheet-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; }
-.sheet-overlay.open { display: block; }
-.sheet { position: fixed; bottom: 0; left: 0; right: 0; z-index: 400; background: var(--bg); border-radius: 20px 20px 0 0; padding: 0 0 calc(20px + var(--safe-bottom)); max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
-.sheet.open { transform: translateY(0); }
-.sheet-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 10px auto 14px; }
-.sheet-title { font-size: 17px; font-weight: 600; color: var(--text); padding: 0 16px 14px; border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.sheet-close { background: var(--bg2); border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 14px; color: var(--text2); display: flex; align-items: center; justify-content: center; }
-.sheet-body { padding: 16px; }
-.detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); gap: 12px; }
-.detail-row:last-child { border-bottom: none; }
-.detail-key { font-size: 13px; color: var(--text2); flex-shrink: 0; }
-.detail-val { font-size: 13px; color: var(--text); text-align: right; }
-.sheet-actions { padding: 0 16px; display: flex; gap: 8px; flex-direction: column; }
+  /* Autocomplete */
+  .autocomplete-list { position: absolute; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); z-index: 50; width: 100%; max-height: 180px; overflow-y: auto; }
+  .autocomplete-item { padding: 10px 12px; cursor: pointer; font-size: 13px; }
+  .autocomplete-item:hover { background: var(--bg3); }
+  .ac-wrap { position: relative; }
 
-/* ── Toast ── */
-.toast { position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(50,50,50,0.92); color: #fff; padding: 9px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* Trend bars */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-label { font-size: 12px; color: var(--text2); width: 100px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-bg { flex: 1; background: var(--bg3); border-radius: 100px; height: 16px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--teal-500); border-radius: 100px; transition: width .4s; }
+  .bar-val { font-size: 12px; font-weight: 600; color: var(--text2); width: 28px; text-align: right; }
 
-/* ── Empty state ── */
-.empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
+  /* Empty state */
+  .empty { text-align: center; padding: 40px 20px; color: var(--text3); }
+  .empty-icon { font-size: 40px; margin-bottom: 10px; }
+  .empty-text { font-size: 14px; }
 
-/* ── Monthly chart canvas ── */
-.chart-wrap { position: relative; width: 100%; height: 150px; }
+  /* Toast */
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 20px; border-radius: 100px; font-size: 13px; font-weight: 600; z-index: 300; display: none; box-shadow: var(--shadow-md); }
+  .toast.show { display: block; animation: fadeInOut 2.5s forwards; }
+  @keyframes fadeInOut { 0%{opacity:0;transform:translateX(-50%) translateY(10px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 75%{opacity:1} 100%{opacity:0} }
+
+  /* Ranking */
+  .rank-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .rank-1 { background: #fef9c3; color: #854d0e; }
+  .rank-2 { background: #f1f5f9; color: #475569; }
+  .rank-3 { background: #fff7ed; color: #7c3aed; }
+  .rank-other { background: var(--bg3); color: var(--text2); }
+
+  /* Section detail page */
+  .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--teal-600); font-size: 14px; font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 16px; font-family: inherit; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 30px; color: var(--text3); }
+
+  /* Chart container */
+  .chart-wrap { position: relative; height: 200px; }
+
+  /* Input row */
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 12px 0; }
 </style>
 </head>
 <body>
-
-<div class="topbar">
-  <div>
-    <div class="topbar-title">修繕管理</div>
-  </div>
-  <div class="topbar-sub">
-    <div class="online-dot"></div>
-    <span>共有データ</span>
-    <button onclick="reloadData()" style="background:none;border:none;font-size:13px;color:#007aff;cursor:pointer;padding:2px 6px;">更新</button>
-  </div>
-</div>
-
-<!-- Pages -->
-<div class="page active" id="page-dash">
-  <div class="metrics-grid" id="metrics"></div>
-  <div class="card">
-    <div class="card-title">設備別修繕回数</div>
-    <div id="type-bars"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">月別修繕件数（直近6ヶ月）</div>
-    <div class="chart-wrap"><canvas id="monthly-chart" role="img" aria-label="月別修繕件数">月別修繕件数</canvas></div>
-  </div>
-  <div class="card">
-    <div class="card-title">アラート</div>
-    <div id="dash-alerts"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">最近の記録</div>
-    <div id="recent-recs"></div>
-  </div>
-</div>
-
-<div class="page" id="page-new">
-  <div class="section-header">新規記録</div>
-  <div class="card">
-    <div class="form-group">
-      <label class="form-label">設備を選択</label>
-      <div class="suggest-wrap">
-        <input type="text" class="form-control" id="f-name" placeholder="機械名を入力または選択…" autocomplete="off"
-          oninput="onNameInput()" onfocus="onNameFocus()" onblur="onNameBlur()">
-        <div class="suggest-list" id="name-suggest"></div>
-      </div>
-      <div class="machine-chip" id="selected-chip">
-        <div class="machine-chip-label">選択中の設備</div>
-        <div class="machine-chip-name" id="chip-name"></div>
-        <div class="machine-chip-detail" id="chip-detail"></div>
-      </div>
+<div id="app">
+  <div class="header">
+    <h1 id="header-title">🏭 修繕管理</h1>
+    <div class="header-btns">
+      <button class="btn-icon" onclick="refreshData()">↻ 更新</button>
     </div>
-    <div class="form-row">
+  </div>
+
+  <!-- Dashboard -->
+  <div id="page-dashboard" class="page active">
+    <div class="stats-grid" id="dash-stats"></div>
+    <div class="card">
+      <div class="card-title">📊 設備別修繕回数</div>
+      <div class="chart-wrap"><canvas id="chart-machine"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 月別修繕件数</div>
+      <div class="chart-wrap"><canvas id="chart-monthly"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔔 直近アラート</div>
+      <div id="dash-alerts"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 最近の記録</div>
+      <div id="dash-recent"></div>
+    </div>
+  </div>
+
+  <!-- New Record -->
+  <div id="page-new" class="page">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px">新規修繕記録</div>
       <div class="form-group">
-        <label class="form-label">設備種別</label>
-        <select class="form-control" id="f-type">
-          <option value="洗濯機">洗濯機</option>
-          <option value="乾燥機">乾燥機</option>
-          <option value="プレス機・アイロン機">プレス機・アイロン機</option>
-          <option value="搬送コンベア・ハンガーシステム">搬送コンベア</option>
+        <label>設備名 *</label>
+        <div class="ac-wrap">
+          <input type="text" id="f-machine" placeholder="設備名を入力..." autocomplete="off" oninput="showSuggest(this.value)">
+          <div class="autocomplete-list" id="suggest-list" style="display:none"></div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <label>設備種別</label>
+          <select id="f-type">
+            <option value="">選択...</option>
+            <option value="wash">洗濯機</option>
+            <option value="dry">乾燥機</option>
+            <option value="press">プレス機・アイロン機</option>
+            <option value="conv">搬送コンベア・ハンガーシステム</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>発生日 *</label>
+          <input type="date" id="f-date">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <label>対応状況</label>
+          <select id="f-status">
+            <option value="todo">未対応</option>
+            <option value="inprog">対応中</option>
+            <option value="done">完了</option>
+            <option value="pend">保留</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>優先度</label>
+          <select id="f-priority">
+            <option value="high">高</option>
+            <option value="mid">中</option>
+            <option value="low">低</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>故障カテゴリ</label>
+        <select id="f-category">
+          <option value="">選択...</option>
+          <option value="electrical">電気系統</option>
+          <option value="mechanical">機械的故障</option>
+          <option value="plumbing">配管・水回り</option>
+          <option value="belt">ベルト・チェーン</option>
+          <option value="bearing">ベアリング・軸受け</option>
+          <option value="sensor">センサー・制御</option>
+          <option value="other">その他</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">発生日</label>
-        <input type="date" class="form-control" id="f-date">
+        <label>故障内容・症状 *</label>
+        <textarea id="f-desc" placeholder="発生した故障の詳細を記入..."></textarea>
       </div>
-    </div>
-    <div class="form-row3">
+      <div class="input-row">
+        <div class="form-group">
+          <label>対応者</label>
+          <input type="text" id="f-worker" placeholder="担当者名">
+        </div>
+        <div class="form-group">
+          <label>修繕費用（円）</label>
+          <input type="number" id="f-cost" placeholder="0">
+        </div>
+      </div>
       <div class="form-group">
-        <label class="form-label">対応状況</label>
-        <select class="form-control" id="f-status">
-          <option value="未対応">未対応</option>
-          <option value="対応中">対応中</option>
-          <option value="修繕完了">修繕完了</option>
+        <label>使用部品</label>
+        <input type="text" id="f-parts" placeholder="交換部品名など">
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <label>次回点検日</label>
+          <input type="date" id="f-nextcheck">
+        </div>
+        <div class="form-group">
+          <label>作業時間（時間）</label>
+          <input type="number" id="f-hours" placeholder="0" step="0.5">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>備考</label>
+        <textarea id="f-note" placeholder="特記事項..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="saveRecord()">📝 記録を保存</button>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div id="page-history" class="page">
+    <input class="search-input" type="text" id="history-search" placeholder="🔍 フリーワード検索..." oninput="renderHistory()">
+    <div class="filter-bar" id="history-type-filter">
+      <button class="filter-btn active" data-val="" onclick="setFilter('type','',this)">すべて</button>
+      <button class="filter-btn" data-val="wash" onclick="setFilter('type','wash',this)">洗濯機</button>
+      <button class="filter-btn" data-val="dry" onclick="setFilter('type','dry',this)">乾燥機</button>
+      <button class="filter-btn" data-val="press" onclick="setFilter('type','press',this)">プレス機</button>
+      <button class="filter-btn" data-val="conv" onclick="setFilter('type','conv',this)">搬送</button>
+    </div>
+    <div class="filter-bar" id="history-status-filter">
+      <button class="filter-btn active" data-val="" onclick="setFilter('status','',this)">全状態</button>
+      <button class="filter-btn" data-val="todo" onclick="setFilter('status','todo',this)">未対応</button>
+      <button class="filter-btn" data-val="inprog" onclick="setFilter('status','inprog',this)">対応中</button>
+      <button class="filter-btn" data-val="done" onclick="setFilter('status','done',this)">完了</button>
+    </div>
+    <div class="period-filter" id="history-period-filter">
+      <button class="period-btn" data-val="month" onclick="setPeriod('history',this)">今月</button>
+      <button class="period-btn" data-val="year" onclick="setPeriod('history',this)">今年</button>
+      <button class="period-btn active" data-val="all" onclick="setPeriod('history',this)">すべて</button>
+    </div>
+    <div id="history-count" style="font-size:12px;color:var(--text2);margin-bottom:8px;"></div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- Analysis -->
+  <div id="page-analysis" class="page">
+    <div class="period-filter" id="analysis-period-filter">
+      <button class="period-btn" data-val="month" onclick="setPeriod('analysis',this)">今月</button>
+      <button class="period-btn" data-val="year" onclick="setPeriod('analysis',this)">今年</button>
+      <button class="period-btn active" data-val="all" onclick="setPeriod('analysis',this)">すべて</button>
+    </div>
+    <div class="card">
+      <div class="card-title">🔧 設備別修繕回数</div>
+      <div id="analysis-machine-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📂 カテゴリ別修繕回数</div>
+      <div id="analysis-cat-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 設備別累計コスト</div>
+      <div class="chart-wrap"><canvas id="chart-cost"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 修繕頻度ランキング（上位5台）</div>
+      <div id="analysis-ranking"></div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div id="page-alerts" class="page">
+    <div class="card">
+      <div class="card-title">🔴 期限超過</div>
+      <div id="alerts-overdue"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🟡 7日以内</div>
+      <div id="alerts-week"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🟢 30日以内</div>
+      <div id="alerts-month"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚠️ 未対応・対応中</div>
+      <div id="alerts-pending"></div>
+    </div>
+  </div>
+
+  <!-- Machines -->
+  <div id="page-machines" class="page">
+    <div id="machine-list-view">
+      <div class="section-header">
+        <span class="section-title">設備マスター</span>
+        <button class="btn btn-sm btn-primary" onclick="openMachineForm()">＋ 追加</button>
+      </div>
+      <div id="machine-list"></div>
+    </div>
+    <!-- Machine Detail View -->
+    <div id="machine-detail-view" style="display:none">
+      <button class="back-btn" onclick="closeMachineDetail()">← 設備一覧に戻る</button>
+      <div id="machine-detail-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="nav">
+  <button class="nav-item active" onclick="showPage('dashboard',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    ダッシュ
+  </button>
+  <button class="nav-item" onclick="showPage('new',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    新規
+  </button>
+  <button class="nav-item" onclick="showPage('history',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    履歴
+  </button>
+  <button class="nav-item" onclick="showPage('analysis',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    分析
+  </button>
+  <button class="nav-item" onclick="showPage('alerts',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+    アラート
+  </button>
+  <button class="nav-item" onclick="showPage('machines',this)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    設備
+  </button>
+</nav>
+
+<!-- Record Detail Modal -->
+<div class="modal-overlay" id="record-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">記録詳細</div>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">閉じる</button>
+      <button class="btn btn-sm" id="modal-complete-btn" style="background:var(--teal-600);color:white;" onclick="completeRecord()">✓ 完了にする</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteRecord()">削除</button>
+    </div>
+  </div>
+</div>
+
+<!-- Machine Form Modal -->
+<div class="modal-overlay" id="machine-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="machine-modal-title">設備登録</div>
+    <input type="hidden" id="mf-id">
+    <div class="form-group"><label>設備名 *</label><input type="text" id="mf-name" placeholder="例: 洗濯機A"></div>
+    <div class="input-row">
+      <div class="form-group">
+        <label>設備種別</label>
+        <select id="mf-type">
+          <option value="wash">洗濯機</option>
+          <option value="dry">乾燥機</option>
+          <option value="press">プレス機・アイロン機</option>
+          <option value="conv">搬送コンベア</option>
+          <option value="other">その他</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">優先度</label>
-        <select class="form-control" id="f-priority">
-          <option value="高">高</option>
-          <option value="中">中</option>
-          <option value="低">低</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">カテゴリ</label>
-        <select class="form-control" id="f-cat">
-          <option value="機械的故障">機械的故障</option>
-          <option value="電気系統">電気系統</option>
-          <option value="制御系統">制御系統</option>
-          <option value="消耗品交換">消耗品交換</option>
-          <option value="定期点検">定期点検</option>
-          <option value="その他">その他</option>
-        </select>
-      </div>
+      <div class="form-group"><label>メーカー</label><input type="text" id="mf-maker" placeholder="メーカー名"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">故障・不具合の内容</label>
-      <textarea class="form-control" id="f-problem" placeholder="例: ドラムから異音が発生。回転速度が低下している。"></textarea>
+    <div class="input-row">
+      <div class="form-group"><label>型番</label><input type="text" id="mf-model" placeholder="型番"></div>
+      <div class="form-group"><label>設置場所</label><input type="text" id="mf-location" placeholder="設置場所"></div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">対応者</label>
-        <input type="text" class="form-control" id="f-worker" placeholder="山田 太郎">
-      </div>
-      <div class="form-group">
-        <label class="form-label">修繕費用（円）</label>
-        <input type="number" class="form-control" id="f-cost" placeholder="15000">
-      </div>
+    <div class="input-row">
+      <div class="form-group"><label>導入年</label><input type="number" id="mf-year" placeholder="例: 2020" min="1990" max="2030"></div>
+      <div class="form-group"><label>点検サイクル（日）</label><input type="number" id="mf-cycle" placeholder="例: 90"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">使用部品・交換部品</label>
-      <input type="text" class="form-control" id="f-parts" placeholder="例: ベルト交換、モーターベアリング">
-    </div>
-    <div class="form-group">
-      <label class="form-label">次回点検予定日</label>
-      <input type="date" class="form-control" id="f-nextcheck">
-    </div>
-    <div class="form-group">
-      <label class="form-label">備考・メモ</label>
-      <textarea class="form-control" id="f-note" placeholder="例: 3ヶ月後に再点検推奨"></textarea>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-primary" style="flex:1" onclick="saveRec()">記録を保存</button>
-      <button class="btn btn-secondary" onclick="clearForm()">クリア</button>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-list">
-  <div class="section-header">修繕履歴</div>
-  <div class="filter-bar">
-    <select id="fl-type" onchange="renderList()">
-      <option value="">すべての設備</option>
-      <option value="洗濯機">洗濯機</option>
-      <option value="乾燥機">乾燥機</option>
-      <option value="プレス機・アイロン機">プレス機</option>
-      <option value="搬送コンベア・ハンガーシステム">搬送</option>
-    </select>
-    <select id="fl-status" onchange="renderList()">
-      <option value="">すべての状態</option>
-      <option value="未対応">未対応</option>
-      <option value="対応中">対応中</option>
-      <option value="修繕完了">修繕完了</option>
-    </select>
-    <input type="text" id="fl-q" placeholder="検索…" oninput="renderList()">
-  </div>
-  <div class="card" style="padding:0 16px">
-    <div id="rec-list"></div>
-  </div>
-</div>
-
-<div class="page" id="page-alert">
-  <div class="section-header">アラート</div>
-  <div id="alert-list"></div>
-  <div style="font-size:13px;font-weight:600;color:var(--text2);margin:14px 0 8px">対応中・未対応</div>
-  <div class="card" style="padding:0 16px"><div id="pending-list"></div></div>
-</div>
-
-<div class="page" id="page-master">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <div class="section-header" style="margin-bottom:0">設備マスター</div>
-    <button class="btn btn-primary" style="padding:8px 14px;font-size:13px" onclick="openMachineSheet(null)">+ 追加</button>
-  </div>
-  <div class="filter-bar">
-    <select id="mf-type" onchange="renderMaster()">
-      <option value="">すべての種別</option>
-      <option value="洗濯機">洗濯機</option>
-      <option value="乾燥機">乾燥機</option>
-      <option value="プレス機・アイロン機">プレス機</option>
-      <option value="搬送コンベア・ハンガーシステム">搬送</option>
-    </select>
-    <input type="text" id="mf-q" placeholder="機械名で検索…" oninput="renderMaster()">
-  </div>
-  <div class="card" style="padding:0 16px"><div id="master-list"></div></div>
-</div>
-
-<!-- Bottom Tab Bar -->
-<div class="tabbar">
-  <button class="tab-item active" onclick="goPage('dash',this)">
-    <span class="tab-icon">&#9632;</span>
-    <span class="tab-label">ダッシュボード</span>
-  </button>
-  <button class="tab-item" onclick="goPage('new',this)">
-    <span class="tab-icon">&#43;</span>
-    <span class="tab-label">新規記録</span>
-  </button>
-  <button class="tab-item" onclick="goPage('list',this)">
-    <span class="tab-icon">&#9776;</span>
-    <span class="tab-label">履歴</span>
-  </button>
-  <button class="tab-item" onclick="goPage('alert',this)">
-    <span class="tab-icon">&#9888;</span>
-    <span class="tab-label">アラート</span>
-  </button>
-  <button class="tab-item" onclick="goPage('master',this)">
-    <span class="tab-icon">&#9881;</span>
-    <span class="tab-label">設備</span>
-  </button>
-</div>
-
-<!-- Detail Sheet -->
-<div class="sheet-overlay" id="detail-overlay" onclick="closeDetailSheet()"></div>
-<div class="sheet" id="detail-sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">
-    <span id="ds-title"></span>
-    <button class="sheet-close" onclick="closeDetailSheet()">✕</button>
-  </div>
-  <div class="sheet-body" id="ds-body"></div>
-  <div class="sheet-actions" id="ds-actions"></div>
-</div>
-
-<!-- Machine Sheet -->
-<div class="sheet-overlay" id="machine-overlay" onclick="closeMachineSheet()"></div>
-<div class="sheet" id="machine-sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">
-    <span id="ms-title">設備を登録</span>
-    <button class="sheet-close" onclick="closeMachineSheet()">✕</button>
-  </div>
-  <div class="sheet-body">
-    <div class="form-group"><label class="form-label">設備種別</label><select class="form-control" id="mm-type"><option value="洗濯機">洗濯機</option><option value="乾燥機">乾燥機</option><option value="プレス機・アイロン機">プレス機・アイロン機</option><option value="搬送コンベア・ハンガーシステム">搬送コンベア・ハンガーシステム</option></select></div>
-    <div class="form-group"><label class="form-label">機械番号・名称</label><input type="text" class="form-control" id="mm-name" placeholder="例: 洗濯機-A1"></div>
-    <div class="form-group"><label class="form-label">メーカー・型番</label><input type="text" class="form-control" id="mm-maker" placeholder="例: 東京洗機 TW-500"></div>
-    <div class="form-group"><label class="form-label">設置年月</label><input type="month" class="form-control" id="mm-installed"></div>
-    <div class="form-group"><label class="form-label">設置場所</label><input type="text" class="form-control" id="mm-location" placeholder="例: 第1工場 Aライン"></div>
-    <div class="form-group"><label class="form-label">定期点検サイクル</label><select class="form-control" id="mm-cycle"><option value="">指定なし</option><option value="1ヶ月">毎月</option><option value="3ヶ月">3ヶ月ごと</option><option value="6ヶ月">6ヶ月ごと</option><option value="1年">年1回</option></select></div>
-    <div class="form-group"><label class="form-label">備考</label><textarea class="form-control" id="mm-note" placeholder="例: 高温対応モデル"></textarea></div>
-    <div style="display:flex;gap:8px;flex-direction:column">
-      <button class="btn btn-primary btn-full" onclick="saveMachine()">保存</button>
-      <button class="btn btn-secondary btn-full" id="mm-delete-btn" style="display:none;color:#ff3b30" onclick="deleteMachineFromSheet()">この設備を削除</button>
+    <div class="form-group"><label>備考</label><textarea id="mf-note" style="min-height:60px" placeholder="特記事項..."></textarea></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeMachineModal()">キャンセル</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveMachine()">保存</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const SK_REC = 'shared_laundry_repair_v1';
-const SK_MAC = 'shared_laundry_machines_v1';
-let recs = [], machines = [], editingMachineId = null;
-let monthChart = null;
+// ============================================================
+// DATA LAYER
+// ============================================================
+let records = [];
+let machines = [];
+let currentRecordId = null;
 
-const TYPES = ['洗濯機','乾燥機','プレス機・アイロン機','搬送コンベア・ハンガーシステム'];
-const TLABELS = ['洗濯機','乾燥機','プレス機','搬送'];
-const TFILLS = ['bf-wash','bf-dry','bf-press','bf-conv'];
-const BBADGE = ['b-wash','b-dry','b-press','b-conv'];
-const CATS = ['機械的故障','電気系統','制御系統','消耗品交換','定期点検','その他'];
+// Filters
+let filters = { type: '', status: '' };
+let periods = { history: 'all', analysis: 'all' };
 
-/* ── Storage ── */
-async function load() {
-  try { const r = await window.storage.get(SK_REC, true); if (r && r.value) recs = JSON.parse(r.value); } catch(e) { recs = []; }
-  try { const m = await window.storage.get(SK_MAC, true); if (m && m.value) machines = JSON.parse(m.value); } catch(e) { machines = []; }
-  initDemo();
-  renderDash();
-  renderList();
-  renderAlert();
-  renderMaster();
+// Charts
+let chartMachine = null, chartMonthly = null, chartCost = null;
+
+// Storage keys
+const RECORDS_KEY = 'shared_laundry_repair_v1';
+const MACHINES_KEY = 'shared_laundry_machines_v1';
+
+async function loadData() {
+  try {
+    const r = await window.storage.get(RECORDS_KEY, true);
+    records = r ? JSON.parse(r.value) : [];
+  } catch(e) { records = []; }
+  try {
+    const m = await window.storage.get(MACHINES_KEY, true);
+    machines = m ? JSON.parse(m.value) : [];
+  } catch(e) { machines = []; }
 }
 
-async function reloadData() {
-  try { const r = await window.storage.get(SK_REC, true); if (r && r.value) recs = JSON.parse(r.value); } catch(e) {}
-  try { const m = await window.storage.get(SK_MAC, true); if (m && m.value) machines = JSON.parse(m.value); } catch(e) {}
-  renderDash(); renderList(); renderAlert(); renderMaster();
-  toast('データを更新しました');
+async function saveRecords() {
+  await window.storage.set(RECORDS_KEY, JSON.stringify(records), true);
+}
+async function saveMachines() {
+  await window.storage.set(MACHINES_KEY, JSON.stringify(machines), true);
 }
 
-async function saveRecs() { try { await window.storage.set(SK_REC, JSON.stringify(recs), true); } catch(e) {} }
-async function saveMachines() { try { await window.storage.set(SK_MAC, JSON.stringify(machines), true); } catch(e) {} }
-
-function initDemo() {
-  if (machines.length === 0) {
-    machines = [
-      {id:101,type:'洗濯機',name:'洗濯機-A1',maker:'東京洗機 TW-500',installed:'2019-04',location:'第1工場 Aライン',cycle:'6ヶ月',note:'大容量モデル'},
-      {id:102,type:'洗濯機',name:'洗濯機-A2',maker:'東京洗機 TW-500',installed:'2019-04',location:'第1工場 Aライン',cycle:'6ヶ月',note:''},
-      {id:103,type:'洗濯機',name:'洗濯機-A3',maker:'大阪機工 WM-300',installed:'2021-07',location:'第1工場 Bライン',cycle:'6ヶ月',note:''},
-      {id:201,type:'乾燥機',name:'乾燥機-B1',maker:'日本乾燥 DR-200',installed:'2018-10',location:'第2工場',cycle:'3ヶ月',note:'フィルター要定期清掃'},
-      {id:202,type:'乾燥機',name:'乾燥機-B2',maker:'日本乾燥 DR-200',installed:'2020-03',location:'第2工場',cycle:'3ヶ月',note:''},
-      {id:301,type:'プレス機・アイロン機',name:'プレス機-C1',maker:'京都プレス KP-100',installed:'2020-06',location:'第3工場',cycle:'6ヶ月',note:'温度制御注意'},
-      {id:401,type:'搬送コンベア・ハンガーシステム',name:'コンベア-D1',maker:'コンベア工業 CV-50',installed:'2017-01',location:'全工場連絡通路',cycle:'1ヶ月',note:'チェーン伸び確認'},
-    ];
-    saveMachines();
-  }
-  if (recs.length === 0) {
-    const today = new Date();
-    function dStr(n){const d=new Date(today);d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];}
-    recs = [
-      {id:1,type:'洗濯機',name:'洗濯機-A1',date:dStr(-40),status:'修繕完了',priority:'高',problem:'ドラムから異音。ベアリング摩耗。',worker:'山田太郎',cost:25000,parts:'モーターベアリング',cat:'機械的故障',nextcheck:dStr(50),note:'半年後に再点検'},
-      {id:2,type:'乾燥機',name:'乾燥機-B2',date:dStr(-20),status:'修繕完了',priority:'中',problem:'加熱不良。ヒーター交換。',worker:'鈴木一郎',cost:18000,parts:'電気ヒーター',cat:'電気系統',nextcheck:dStr(40),note:''},
-      {id:3,type:'洗濯機',name:'洗濯機-A2',date:dStr(-10),status:'対応中',priority:'高',problem:'排水ポンプ故障。水漏れあり。',worker:'田中花子',cost:12000,parts:'排水ポンプ',cat:'機械的故障',nextcheck:dStr(20),note:'部品入荷待ち'},
-      {id:4,type:'プレス機・アイロン機',name:'プレス機-C1',date:dStr(-5),status:'未対応',priority:'中',problem:'温度制御の異常。設定温度に達しない。',worker:'',cost:null,parts:'',cat:'制御系統',nextcheck:dStr(10),note:'至急対応が必要'},
-      {id:5,type:'搬送コンベア・ハンガーシステム',name:'コンベア-D1',date:dStr(-60),status:'修繕完了',priority:'低',problem:'チェーン伸び。定期交換。',worker:'山田太郎',cost:8000,parts:'搬送チェーン',cat:'消耗品交換',nextcheck:dStr(5),note:''},
-      {id:6,type:'乾燥機',name:'乾燥機-B1',date:dStr(-80),status:'修繕完了',priority:'中',problem:'フィルター目詰まり。',worker:'鈴木一郎',cost:3000,parts:'フィルター',cat:'消耗品交換',nextcheck:dStr(2),note:'定期清掃推奨'},
-      {id:7,type:'洗濯機',name:'洗濯機-A3',date:dStr(-90),status:'修繕完了',priority:'低',problem:'ドアパッキン劣化。水漏れ。',worker:'田中花子',cost:6000,parts:'ドアパッキン',cat:'消耗品交換',nextcheck:dStr(-3),note:''},
-    ];
-    saveRecs();
-  }
+async function refreshData() {
+  await loadData();
+  renderCurrentPage();
+  showToast('データを更新しました');
 }
 
-/* ── Navigation ── */
-function goPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  el.classList.add('active');
-  if (name === 'list') renderList();
-  if (name === 'alert') renderAlert();
-  if (name === 'master') renderMaster();
+// ============================================================
+// HELPERS
+// ============================================================
+function typeName(t) {
+  return {wash:'洗濯機',dry:'乾燥機',press:'プレス機・アイロン機',conv:'搬送コンベア・ハンガーシステム',other:'その他'}[t]||t||'不明';
 }
+function typeBadge(t) {
+  return `<span class="badge badge-${t||'other'}">${typeName(t)}</span>`;
+}
+function statusBadge(s) {
+  const m = {todo:['badge-todo','未対応'],inprog:['badge-inprog','対応中'],done:['badge-done','完了'],pend:['badge-pend','保留']};
+  const [cls,txt] = m[s]||['badge-other',s||'不明'];
+  return `<span class="badge ${cls}">${txt}</span>`;
+}
+function priorityBadge(p) {
+  const m = {high:['badge-high','高'],mid:['badge-mid','中'],low:['badge-low','低']};
+  const [cls,txt] = m[p]||['badge-other',p||'-'];
+  return `<span class="badge ${cls}">${txt}</span>`;
+}
+function categoryName(c) {
+  return {electrical:'電気系統',mechanical:'機械的故障',plumbing:'配管・水回り',belt:'ベルト・チェーン',bearing:'ベアリング・軸受け',sensor:'センサー・制御',other:'その他'}[c]||c||'-';
+}
+function typeIcon(t) {
+  return {wash:'🫧',dry:'♨️',press:'👔',conv:'⛓️',other:'🔧'}[t]||'🔧';
+}
+function typeBg(t) {
+  return {wash:'#dbeafe',dry:'#fef9c3',press:'#fce7f3',conv:'#dcfce7',other:'#f1f5f9'}[t]||'#f1f5f9';
+}
+function fmtDate(d) { return d ? d.replace(/-/g,'/') : '-'; }
+function fmtCost(c) { return c ? Number(c).toLocaleString()+'円' : '-'; }
+function uid() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
 
-/* ── Helpers ── */
-function typeBadge(type) { const i = TYPES.indexOf(type); return `<span class="badge ${BBADGE[i]||'b-wash'}">${TLABELS[i]||type}</span>`; }
-function stBadge(s) { const m = {未対応:'b-open',対応中:'b-prog',修繕完了:'b-done'}; return `<span class="badge ${m[s]||'b-open'}">${s}</span>`; }
-
-/* ── Dashboard ── */
-function renderDash() {
-  const total = recs.length;
-  const open = recs.filter(r => r.status !== '修繕完了').length;
+function filterByPeriod(arr, period, dateField='date') {
+  if (period === 'all') return arr;
   const now = new Date();
-  const thisM = recs.filter(r => { if(!r.date)return false; const d=new Date(r.date); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); }).length;
-  const totalCost = recs.reduce((s,r) => s+(r.cost||0), 0);
-  document.getElementById('metrics').innerHTML = `
-    <div class="metric-card"><div class="metric-label">総修繕件数</div><div class="metric-value">${total}</div></div>
-    <div class="metric-card"><div class="metric-label">対応中・未対応</div><div class="metric-value danger">${open}</div></div>
-    <div class="metric-card"><div class="metric-label">今月の修繕</div><div class="metric-value">${thisM}</div></div>
-    <div class="metric-card"><div class="metric-label">累計費用</div><div class="metric-value" style="font-size:18px">${totalCost.toLocaleString()}円</div></div>`;
-
-  const counts = TYPES.map(t => recs.filter(r => r.type === t).length);
-  const maxC = Math.max(...counts, 1);
-  document.getElementById('type-bars').innerHTML = TYPES.map((t,i) => `
-    <div class="bar-row"><div class="bar-label">${TLABELS[i]}</div>
-    <div class="bar-track"><div class="bar-fill ${TFILLS[i]}" style="width:${Math.round(counts[i]/maxC*100)}%">${counts[i]}件</div></div></div>`).join('');
-
-  renderMonthlyChart();
-
-  const alerts = getAlerts().slice(0,3);
-  document.getElementById('dash-alerts').innerHTML = alerts.length
-    ? alerts.map(a => `<div class="alert-card ${a.cls}"><div class="alert-title">${a.title}</div><div class="alert-sub">${a.sub}</div></div>`).join('')
-    : '<div class="empty">アラートなし</div>';
-
-  const recent = recs.slice().sort((a,b) => new Date(b.date||0)-new Date(a.date||0)).slice(0,4);
-  document.getElementById('recent-recs').innerHTML = recent.map(r => recHTML(r)).join('');
-}
-
-function renderMonthlyChart() {
-  const months = [], labels = [];
-  for (let i=5; i>=0; i--) { const d=new Date(); d.setMonth(d.getMonth()-i); labels.push((d.getMonth()+1)+'月'); months.push({y:d.getFullYear(),m:d.getMonth()}); }
-  const data = months.map(({y,m}) => recs.filter(r => { if(!r.date)return false; const d=new Date(r.date); return d.getFullYear()===y&&d.getMonth()===m; }).length);
-  if (monthChart) monthChart.destroy();
-  monthChart = new Chart(document.getElementById('monthly-chart'), {
-    type:'bar', data:{labels, datasets:[{label:'件数', data, backgroundColor:'#b5d4f4', borderRadius:5}]},
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:10}},grid:{color:'rgba(128,128,128,0.15)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}
-  });
-}
-
-/* ── Alert ── */
-function getAlerts() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const alerts = [];
-  recs.forEach(r => {
-    if (!r.nextcheck) return;
-    const nc = new Date(r.nextcheck); nc.setHours(0,0,0,0);
-    const diff = Math.round((nc-today)/(1000*60*60*24));
-    if (diff < 0) alerts.push({cls:'urgent',title:`【期限超過】${r.name} — 点検${Math.abs(diff)}日超過`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
-    else if (diff <= 7) alerts.push({cls:'warn',title:`【要注意】${r.name} — ${diff}日後に点検`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
-    else if (diff <= 30) alerts.push({cls:'ok',title:`${r.name} — ${diff}日後に点検`,sub:`次回点検予定: ${r.nextcheck}`,rec:r});
-  });
-  alerts.sort((a,b) => ({'urgent':0,'warn':1,'ok':2}[a.cls]-{'urgent':0,'warn':1,'ok':2}[b.cls]));
-  return alerts;
-}
-
-function renderAlert() {
-  const alerts = getAlerts();
-  document.getElementById('alert-list').innerHTML = alerts.length
-    ? alerts.map(a => `<div class="alert-card ${a.cls}" onclick="showDetail(${a.rec.id})"><div class="alert-title">${a.title}</div><div class="alert-sub">${a.sub}</div></div>`).join('')
-    : '<div class="empty">期限超過・近接の点検なし</div>';
-  const pending = recs.filter(r => r.status !== '修繕完了');
-  document.getElementById('pending-list').innerHTML = pending.length ? pending.map(r => recHTML(r)).join('') : '<div class="empty">対応中・未対応なし</div>';
-}
-
-/* ── Record list ── */
-function recHTML(r) {
-  const ti = TYPES.indexOf(r.type);
-  const stM = {未対応:'b-open',対応中:'b-prog',修繕完了:'b-done'};
-  return `<div class="list-item" onclick="showDetail(${r.id})">
-    <div class="list-meta">
-      <div class="list-title"><span class="badge ${BBADGE[ti]||'b-wash'}">${TLABELS[ti]||r.type}</span>${r.name}<span class="badge ${stM[r.status]||'b-open'}">${r.status}</span></div>
-      <div class="list-sub">${(r.problem||'').slice(0,40)}${(r.problem||'').length>40?'…':''}</div>
-    </div>
-    <div class="list-right">${r.date||'—'}<br>${r.cost!=null?r.cost.toLocaleString()+'円':'—'}</div>
-  </div>`;
-}
-
-function renderList() {
-  const ft = document.getElementById('fl-type').value;
-  const fs = document.getElementById('fl-status').value;
-  const fq = (document.getElementById('fl-q').value||'').toLowerCase();
-  const filtered = recs.slice().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).filter(r => {
-    if (ft && r.type !== ft) return false;
-    if (fs && r.status !== fs) return false;
-    if (fq && !(r.name.toLowerCase().includes(fq)||(r.problem||'').toLowerCase().includes(fq))) return false;
+  return arr.filter(r => {
+    const d = new Date(r[dateField]);
+    if (period === 'month') return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+    if (period === 'year') return d.getFullYear()===now.getFullYear();
     return true;
   });
-  document.getElementById('rec-list').innerHTML = filtered.length ? filtered.map(r=>recHTML(r)).join('') : '<div class="empty">該当する記録がありません</div>';
 }
 
-/* ── Detail sheet ── */
-function showDetail(id) {
-  const r = recs.find(x=>x.id===id); if(!r) return;
-  document.getElementById('ds-title').innerHTML = `${r.name} ${typeBadge(r.type)}`;
-  const rows = [['対応状況',stBadge(r.status)],['優先度',r.priority||'—'],['発生日',r.date||'—'],['カテゴリ',r.cat||'—'],['不具合内容',r.problem||'—'],['対応者',r.worker||'—'],['使用部品',r.parts||'—'],['修繕費用',r.cost!=null?r.cost.toLocaleString()+'円':'—'],['次回点検',r.nextcheck||'—'],['備考',r.note||'—']];
-  document.getElementById('ds-body').innerHTML = rows.map(([k,v])=>`<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`).join('');
-  document.getElementById('ds-actions').innerHTML = r.status !== '修繕完了'
-    ? `<button class="btn btn-primary btn-full" onclick="markDone(${r.id})">修繕完了にする</button><button class="btn btn-secondary btn-full" onclick="deleteRec(${r.id})" style="color:#ff3b30">削除</button>`
-    : `<button class="btn btn-secondary btn-full" onclick="deleteRec(${r.id})" style="color:#ff3b30">削除</button>`;
-  document.getElementById('detail-overlay').classList.add('open');
-  document.getElementById('detail-sheet').classList.add('open');
-}
-function closeDetailSheet() {
-  document.getElementById('detail-overlay').classList.remove('open');
-  document.getElementById('detail-sheet').classList.remove('open');
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('show');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-function markDone(id) {
-  const r = recs.find(x=>x.id===id); if(!r) return;
-  r.status = '修繕完了'; saveRecs(); renderDash(); renderList(); renderAlert();
-  closeDetailSheet(); toast('修繕完了に更新しました');
-}
-function deleteRec(id) {
-  recs = recs.filter(x=>x.id!==id); saveRecs(); renderDash(); renderList(); renderAlert();
-  closeDetailSheet(); toast('記録を削除しました');
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentPage = 'dashboard';
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if (el) el.classList.add('active');
+  currentPage = name;
+
+  // Reset machine detail view when switching to machines
+  if (name === 'machines') {
+    document.getElementById('machine-list-view').style.display = '';
+    document.getElementById('machine-detail-view').style.display = 'none';
+  }
+
+  renderPage(name);
+  window.scrollTo(0,0);
 }
 
-/* ── Master ── */
-function renderMaster() {
-  const ft = document.getElementById('mf-type').value;
-  const fq = (document.getElementById('mf-q').value||'').toLowerCase();
-  const filtered = machines.filter(m => { if(ft&&m.type!==ft)return false; if(fq&&!m.name.toLowerCase().includes(fq))return false; return true; });
-  if (!filtered.length) { document.getElementById('master-list').innerHTML='<div class="empty">登録された設備がありません</div>'; return; }
-  const byType = {}; TYPES.forEach(t=>byType[t]=[]);
-  filtered.forEach(m => { if(byType[m.type]) byType[m.type].push(m); });
-  let html = '';
-  TYPES.forEach((t,ti) => {
-    if (!byType[t].length) return;
-    html += `<div style="padding:10px 0 4px;font-size:11px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px"><span class="badge ${BBADGE[ti]}">${TLABELS[ti]}</span>${byType[t].length}台</div>`;
-    byType[t].forEach(m => {
-      const cnt = recs.filter(r=>r.name===m.name).length;
-      html += `<div class="master-item">
-        <div class="master-info"><div class="master-name">${m.name}</div><div class="master-sub">${[m.maker,m.location].filter(Boolean).join(' / ')}</div></div>
-        <div class="master-right">修繕${cnt}回<br>${m.cycle||'—'}</div>
-        <button class="edit-btn" onclick="openMachineSheet(${m.id})">編集</button>
-      </div>`;
+function renderCurrentPage() { renderPage(currentPage); }
+
+function renderPage(name) {
+  if (name==='dashboard') renderDashboard();
+  else if (name==='history') renderHistory();
+  else if (name==='analysis') renderAnalysis();
+  else if (name==='alerts') renderAlerts();
+  else if (name==='machines') renderMachineList();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const now = new Date();
+  const thisMonth = records.filter(r => {
+    const d = new Date(r.date);
+    return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+  });
+  const inprog = records.filter(r => r.status==='inprog'||r.status==='todo');
+  const totalCost = records.reduce((s,r) => s+(Number(r.cost)||0), 0);
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">総修繕件数</div><div class="stat-value">${records.length}<span class="stat-unit">件</span></div></div>
+    <div class="stat-card"><div class="stat-label">対応中</div><div class="stat-value" style="color:var(--amber)">${inprog.length}<span class="stat-unit">件</span></div></div>
+    <div class="stat-card"><div class="stat-label">今月の修繕</div><div class="stat-value">${thisMonth.length}<span class="stat-unit">件</span></div></div>
+    <div class="stat-card"><div class="stat-label">累計費用</div><div class="stat-value" style="font-size:16px">${totalCost>=10000?(totalCost/10000).toFixed(1)+'万':totalCost.toLocaleString()}<span class="stat-unit">円</span></div></div>
+  `;
+
+  // Machine bar chart
+  const machineCounts = {};
+  records.forEach(r => { machineCounts[r.machine] = (machineCounts[r.machine]||0)+1; });
+  const machineEntries = Object.entries(machineCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  if (chartMachine) chartMachine.destroy();
+  const ctx1 = document.getElementById('chart-machine').getContext('2d');
+  chartMachine = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: machineEntries.map(e=>e[0]),
+      datasets: [{ data: machineEntries.map(e=>e[1]), backgroundColor: '#14b8a6', borderRadius: 4 }]
+    },
+    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{ticks:{stepSize:1}},y:{ticks:{font:{size:11}}}} }
+  });
+
+  // Monthly chart
+  const monthlyCounts = {};
+  records.forEach(r => {
+    if (r.date) {
+      const k = r.date.substr(0,7);
+      monthlyCounts[k] = (monthlyCounts[k]||0)+1;
+    }
+  });
+  const months = Object.keys(monthlyCounts).sort().slice(-6);
+
+  if (chartMonthly) chartMonthly.destroy();
+  const ctx2 = document.getElementById('chart-monthly').getContext('2d');
+  chartMonthly = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: months.map(m=>m.replace('-','/')),
+      datasets: [{ data: months.map(m=>monthlyCounts[m]), borderColor:'#0d9488', backgroundColor:'rgba(13,148,136,.15)', fill:true, tension:.3, pointRadius:4 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{stepSize:1}}} }
+  });
+
+  // Alerts
+  const today = new Date(); today.setHours(0,0,0,0);
+  const alertRecs = records.filter(r => r.nextCheck).slice(0,5).map(r => {
+    const d = new Date(r.nextCheck); d.setHours(0,0,0,0);
+    const diff = Math.round((d-today)/(1000*60*60*24));
+    return {...r, diff};
+  }).filter(r=>r.diff<=30).sort((a,b)=>a.diff-b.diff);
+
+  const alertsEl = document.getElementById('dash-alerts');
+  if (!alertRecs.length) { alertsEl.innerHTML = '<div class="empty"><div class="empty-text">アラートなし</div></div>'; }
+  else {
+    alertsEl.innerHTML = alertRecs.map(r => {
+      const cls = r.diff<0?'alert-red':r.diff<=7?'alert-amber':'alert-green';
+      const label = r.diff<0?`${Math.abs(r.diff)}日超過`:r.diff===0?'今日':`${r.diff}日後`;
+      return `<div class="alert-item ${cls}"><div class="alert-title">${r.machine}</div><div class="alert-sub">次回点検: ${fmtDate(r.nextCheck)} (${label})</div></div>`;
+    }).join('');
+  }
+
+  // Recent
+  const recentEl = document.getElementById('dash-recent');
+  const recent = [...records].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+  if (!recent.length) { recentEl.innerHTML = '<div class="empty"><div class="empty-text">記録なし</div></div>'; }
+  else {
+    recentEl.innerHTML = recent.map(r => `
+      <div class="record-item" onclick="openRecord('${r.id}')">
+        <div class="record-header">${typeBadge(r.type)} ${statusBadge(r.status)} <span class="record-name">${r.machine}</span></div>
+        <div class="record-meta"><span>${fmtDate(r.date)}</span>${r.cost?`<span>💴${fmtCost(r.cost)}</span>`:''}</div>
+        ${r.desc?`<div class="record-desc">${r.desc.substr(0,50)}${r.desc.length>50?'…':''}</div>`:''}
+      </div>`).join('');
+  }
+}
+
+// ============================================================
+// HISTORY
+// ============================================================
+function setFilter(key, val, el) {
+  filters[key] = val;
+  el.closest('.filter-bar').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderHistory();
+}
+
+function setPeriod(page, el) {
+  periods[page] = el.dataset.val;
+  el.closest('.period-filter').querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (page==='history') renderHistory();
+  else renderAnalysis();
+}
+
+function renderHistory() {
+  const q = (document.getElementById('history-search')||{}).value?.toLowerCase()||'';
+  let filtered = records;
+  if (filters.type) filtered = filtered.filter(r=>r.type===filters.type);
+  if (filters.status) filtered = filtered.filter(r=>r.status===filters.status);
+  filtered = filterByPeriod(filtered, periods.history);
+  if (q) filtered = filtered.filter(r => (r.machine||'').toLowerCase().includes(q)||(r.desc||'').toLowerCase().includes(q)||(r.worker||'').toLowerCase().includes(q));
+  filtered = filtered.sort((a,b) => new Date(b.date)-new Date(a.date));
+
+  const countEl = document.getElementById('history-count');
+  if (countEl) countEl.textContent = `${filtered.length}件`;
+
+  const el = document.getElementById('history-list');
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">条件に合う記録がありません</div></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(r => `
+    <div class="record-item" onclick="openRecord('${r.id}')">
+      <div class="record-header">${typeBadge(r.type)} ${statusBadge(r.status)} ${priorityBadge(r.priority)}</div>
+      <div class="record-name" style="margin:4px 0">${r.machine}</div>
+      <div class="record-meta">
+        <span>📅 ${fmtDate(r.date)}</span>
+        ${r.worker?`<span>👤 ${r.worker}</span>`:''}
+        ${r.cost?`<span>💴 ${fmtCost(r.cost)}</span>`:''}
+      </div>
+      ${r.desc?`<div class="record-desc">${r.desc.substr(0,60)}${r.desc.length>60?'…':''}</div>`:''}
+    </div>`).join('');
+}
+
+// ============================================================
+// ANALYSIS
+// ============================================================
+function renderAnalysis() {
+  const filtered = filterByPeriod(records, periods.analysis);
+
+  // Machine bars
+  const machineCounts = {};
+  filtered.forEach(r => { machineCounts[r.machine] = (machineCounts[r.machine]||0)+1; });
+  const machineEntries = Object.entries(machineCounts).sort((a,b)=>b[1]-a[1]);
+  const maxM = machineEntries[0]?.[1]||1;
+  document.getElementById('analysis-machine-bars').innerHTML = machineEntries.length
+    ? machineEntries.map(([k,v]) => `<div class="bar-row"><div class="bar-label" title="${k}">${k}</div><div class="bar-bg"><div class="bar-fill" style="width:${v/maxM*100}%"></div></div><div class="bar-val">${v}</div></div>`).join('')
+    : '<div class="empty"><div class="empty-text">データなし</div></div>';
+
+  // Category bars
+  const catCounts = {};
+  filtered.forEach(r => { const c=r.category||'other'; catCounts[c]=(catCounts[c]||0)+1; });
+  const catEntries = Object.entries(catCounts).sort((a,b)=>b[1]-a[1]);
+  const maxC = catEntries[0]?.[1]||1;
+  document.getElementById('analysis-cat-bars').innerHTML = catEntries.length
+    ? catEntries.map(([k,v]) => `<div class="bar-row"><div class="bar-label">${categoryName(k)}</div><div class="bar-bg"><div class="bar-fill" style="width:${v/maxC*100}%;background:#6366f1"></div></div><div class="bar-val">${v}</div></div>`).join('')
+    : '<div class="empty"><div class="empty-text">データなし</div></div>';
+
+  // Cost chart
+  const machineCosts = {};
+  filtered.forEach(r => { machineCosts[r.machine] = (machineCosts[r.machine]||0)+(Number(r.cost)||0); });
+  const costEntries = Object.entries(machineCosts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  if (chartCost) chartCost.destroy();
+  const ctx = document.getElementById('chart-cost').getContext('2d');
+  chartCost = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: costEntries.map(e=>e[0]),
+      datasets: [{ data: costEntries.map(e=>e[1]), backgroundColor:'#f59e0b', borderRadius:4 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>v>=10000?v/10000+'万':v}}} }
+  });
+
+  // Ranking
+  const rankEl = document.getElementById('analysis-ranking');
+  if (!machineEntries.length) { rankEl.innerHTML = '<div class="empty"><div class="empty-text">データなし</div></div>'; return; }
+  rankEl.innerHTML = machineEntries.slice(0,5).map(([k,v],i) => {
+    const cls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-other';
+    return `<div class="rank-item"><div class="rank-num ${cls}">${i+1}</div><div style="flex:1">${k}</div><div style="font-weight:700;color:var(--teal-600)">${v}回</div></div>`;
+  }).join('');
+}
+
+// ============================================================
+// ALERTS
+// ============================================================
+function renderAlerts() {
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const withDiff = records.filter(r=>r.nextCheck).map(r => {
+    const d = new Date(r.nextCheck); d.setHours(0,0,0,0);
+    return {...r, diff: Math.round((d-today)/(1000*60*60*24))};
+  });
+
+  const overdue = withDiff.filter(r=>r.diff<0).sort((a,b)=>a.diff-b.diff);
+  const week = withDiff.filter(r=>r.diff>=0&&r.diff<=7).sort((a,b)=>a.diff-b.diff);
+  const month = withDiff.filter(r=>r.diff>7&&r.diff<=30).sort((a,b)=>a.diff-b.diff);
+  const pending = records.filter(r=>r.status==='todo'||r.status==='inprog').sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  function alertHtml(r, cls) {
+    const label = r.diff<0?`${Math.abs(r.diff)}日超過`:r.diff===0?'今日':`${r.diff}日後`;
+    return `<div class="alert-item ${cls}" style="cursor:pointer" onclick="openRecord('${r.id}')">
+      <div class="alert-title">${r.machine} ${statusBadge(r.status)}</div>
+      <div class="alert-sub">点検日: ${fmtDate(r.nextCheck)} (${label})</div>
+    </div>`;
+  }
+
+  const empty = '<div class="empty"><div class="empty-text">なし</div></div>';
+  document.getElementById('alerts-overdue').innerHTML = overdue.length ? overdue.map(r=>alertHtml(r,'alert-red')).join('') : empty;
+  document.getElementById('alerts-week').innerHTML = week.length ? week.map(r=>alertHtml(r,'alert-amber')).join('') : empty;
+  document.getElementById('alerts-month').innerHTML = month.length ? month.map(r=>alertHtml(r,'alert-green')).join('') : empty;
+
+  const pendingEl = document.getElementById('alerts-pending');
+  pendingEl.innerHTML = pending.length ? pending.map(r => `
+    <div class="record-item" onclick="openRecord('${r.id}')">
+      <div class="record-header">${typeBadge(r.type)} ${statusBadge(r.status)} ${priorityBadge(r.priority)}</div>
+      <div class="record-name" style="margin:4px 0">${r.machine}</div>
+      <div class="record-meta"><span>${fmtDate(r.date)}</span>${r.worker?`<span>👤 ${r.worker}</span>`:''}</div>
+    </div>`).join('') : empty;
+}
+
+// ============================================================
+// MACHINES
+// ============================================================
+function renderMachineList() {
+  const el = document.getElementById('machine-list');
+  if (!machines.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-text">設備が登録されていません</div></div>';
+    return;
+  }
+  el.innerHTML = machines.map(m => {
+    const recs = records.filter(r=>r.machine===m.name);
+    const cost = recs.reduce((s,r)=>s+(Number(r.cost)||0),0);
+    const last = recs.sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    return `<div class="machine-card" onclick="openMachineDetail('${m.id}')">
+      <div class="machine-header">
+        <div class="machine-icon" style="background:${typeBg(m.type)}">${typeIcon(m.type)}</div>
+        <div class="machine-info">
+          <div class="machine-name">${m.name}</div>
+          <div class="machine-sub">${typeName(m.type)}${m.maker?' | '+m.maker:''}${m.location?' | '+m.location:''}</div>
+        </div>
+        <button class="btn btn-sm btn-secondary" style="flex-shrink:0" onclick="event.stopPropagation();editMachine('${m.id}')">編集</button>
+      </div>
+      <div class="machine-stats">
+        <div class="machine-stat"><div class="machine-stat-val">${recs.length}</div><div class="machine-stat-lbl">修繕回数</div></div>
+        <div class="machine-stat"><div class="machine-stat-val">${cost>=10000?(cost/10000).toFixed(1)+'万':cost.toLocaleString()}</div><div class="machine-stat-lbl">累計費用(円)</div></div>
+        <div class="machine-stat"><div class="machine-stat-val">${last?fmtDate(last.date).substr(0,7):'-'}</div><div class="machine-stat-lbl">最終修繕</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// MACHINE DETAIL (New Feature: ①)
+// ============================================================
+function openMachineDetail(machineId) {
+  const m = machines.find(x=>x.id===machineId);
+  if (!m) return;
+
+  document.getElementById('machine-list-view').style.display = 'none';
+  document.getElementById('machine-detail-view').style.display = '';
+
+  document.getElementById('header-title').textContent = `⚙️ ${m.name}`;
+
+  const recs = records.filter(r=>r.machine===m.name).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const cost = recs.reduce((s,r)=>s+(Number(r.cost)||0),0);
+  const last = recs[0];
+
+  // Period filter state for machine detail
+  let detailPeriod = 'all';
+
+  function renderDetail(period) {
+    const filtered = filterByPeriod(recs, period);
+    const fCost = filtered.reduce((s,r)=>s+(Number(r.cost)||0),0);
+    const el = document.getElementById('machine-detail-content');
+    el.innerHTML = `
+      <div class="card">
+        <div class="machine-header" style="margin-bottom:12px">
+          <div class="machine-icon" style="background:${typeBg(m.type)};width:48px;height:48px;font-size:24px">${typeIcon(m.type)}</div>
+          <div class="machine-info">
+            <div class="machine-name" style="font-size:17px">${m.name}</div>
+            <div class="machine-sub">${typeName(m.type)}</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="detail-row"><div class="detail-label">メーカー</div><div class="detail-value">${m.maker||'-'}</div></div>
+        <div class="detail-row"><div class="detail-label">型番</div><div class="detail-value">${m.model||'-'}</div></div>
+        <div class="detail-row"><div class="detail-label">設置場所</div><div class="detail-value">${m.location||'-'}</div></div>
+        <div class="detail-row"><div class="detail-label">導入年</div><div class="detail-value">${m.year||'-'}年</div></div>
+        <div class="detail-row"><div class="detail-label">点検サイクル</div><div class="detail-value">${m.cycle||'-'}日</div></div>
+        ${m.note?`<div class="detail-row"><div class="detail-label">備考</div><div class="detail-value">${m.note}</div></div>`:''}
+      </div>
+
+      <div class="period-filter" id="detail-period-filter">
+        <button class="period-btn ${period==='month'?'active':''}" onclick="changeDetailPeriod('month','${machineId}')">今月</button>
+        <button class="period-btn ${period==='year'?'active':''}" onclick="changeDetailPeriod('year','${machineId}')">今年</button>
+        <button class="period-btn ${period==='all'?'active':''}" onclick="changeDetailPeriod('all','${machineId}')">すべて</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">修繕回数</div><div class="stat-value">${filtered.length}<span class="stat-unit">回</span></div></div>
+        <div class="stat-card"><div class="stat-label">累計費用</div><div class="stat-value" style="font-size:16px">${fCost>=10000?(fCost/10000).toFixed(1)+'万':fCost.toLocaleString()}<span class="stat-unit">円</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📂 カテゴリ別内訳</div>
+        ${(() => {
+          const cats = {};
+          filtered.forEach(r => { const c=r.category||'other'; cats[c]=(cats[c]||0)+1; });
+          const entries = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+          const max = entries[0]?.[1]||1;
+          return entries.length
+            ? entries.map(([k,v])=>`<div class="bar-row"><div class="bar-label">${categoryName(k)}</div><div class="bar-bg"><div class="bar-fill" style="width:${v/max*100}%;background:#6366f1"></div></div><div class="bar-val">${v}</div></div>`).join('')
+            : '<div class="empty"><div class="empty-text">データなし</div></div>';
+        })()}
+      </div>
+
+      <div class="section-header" style="margin-bottom:8px">
+        <span class="section-title">修繕履歴（${filtered.length}件）</span>
+      </div>
+      ${filtered.length ? filtered.map(r => `
+        <div class="record-item" onclick="openRecord('${r.id}')">
+          <div class="record-header">${statusBadge(r.status)} ${priorityBadge(r.priority)} ${r.category?`<span style="font-size:11px;color:var(--text2)">${categoryName(r.category)}</span>`:''}</div>
+          <div class="record-name" style="margin:4px 0">${fmtDate(r.date)}</div>
+          <div class="record-meta">
+            ${r.worker?`<span>👤 ${r.worker}</span>`:''}
+            ${r.cost?`<span>💴 ${fmtCost(r.cost)}</span>`:''}
+            ${r.hours?`<span>⏱️ ${r.hours}h</span>`:''}
+          </div>
+          ${r.desc?`<div class="record-desc">${r.desc.substr(0,80)}${r.desc.length>80?'…':''}</div>`:''}
+        </div>`).join('') : '<div class="empty"><div class="empty-text">この期間に記録なし</div></div>'}
+    `;
+  }
+
+  // Store render function globally so period buttons can call it
+  window._currentMachineDetailId = machineId;
+  window._currentMachineDetailPeriod = 'all';
+  renderDetail('all');
+}
+
+window.changeDetailPeriod = function(period, machineId) {
+  window._currentMachineDetailPeriod = period;
+  openMachineDetail(machineId);
+  // Scroll to period filter
+};
+
+function closeMachineDetail() {
+  document.getElementById('machine-list-view').style.display = '';
+  document.getElementById('machine-detail-view').style.display = 'none';
+  document.getElementById('header-title').textContent = '🏭 修繕管理';
+  renderMachineList();
+}
+
+// ============================================================
+// MACHINE FORM
+// ============================================================
+function openMachineForm(id) {
+  document.getElementById('machine-modal-title').textContent = id ? '設備編集' : '設備登録';
+  document.getElementById('mf-id').value = id||'';
+  if (id) {
+    const m = machines.find(x=>x.id===id);
+    if (m) {
+      ['name','type','maker','model','location','year','cycle','note'].forEach(f => {
+        const el = document.getElementById('mf-'+f);
+        if (el) el.value = m[f]||'';
+      });
+    }
+  } else {
+    ['name','maker','model','location','year','cycle','note'].forEach(f => {
+      const el = document.getElementById('mf-'+f);
+      if (el) el.value = '';
     });
-  });
-  document.getElementById('master-list').innerHTML = html;
+    document.getElementById('mf-type').value = 'wash';
+  }
+  document.getElementById('machine-modal').classList.add('open');
 }
 
-function openMachineSheet(id) {
-  editingMachineId = id;
-  const m = id ? machines.find(x=>x.id===id) : null;
-  document.getElementById('ms-title').textContent = m ? '設備を編集' : '設備を新規登録';
-  document.getElementById('mm-type').value = m ? m.type : '洗濯機';
-  document.getElementById('mm-name').value = m ? m.name : '';
-  document.getElementById('mm-maker').value = m ? m.maker : '';
-  document.getElementById('mm-installed').value = m ? m.installed : '';
-  document.getElementById('mm-location').value = m ? m.location : '';
-  document.getElementById('mm-cycle').value = m ? m.cycle : '';
-  document.getElementById('mm-note').value = m ? m.note : '';
-  document.getElementById('mm-delete-btn').style.display = m ? 'block' : 'none';
-  document.getElementById('machine-overlay').classList.add('open');
-  document.getElementById('machine-sheet').classList.add('open');
-}
-function closeMachineSheet() {
-  document.getElementById('machine-overlay').classList.remove('open');
-  document.getElementById('machine-sheet').classList.remove('open');
-}
-function saveMachine() {
-  const name = document.getElementById('mm-name').value.trim();
-  if (!name) { toast('機械名は必須です'); return; }
-  if (!editingMachineId && machines.find(m=>m.name===name)) { toast('同じ名称が既に登録されています'); return; }
-  const data = { type:document.getElementById('mm-type').value, name, maker:document.getElementById('mm-maker').value.trim(), installed:document.getElementById('mm-installed').value, location:document.getElementById('mm-location').value.trim(), cycle:document.getElementById('mm-cycle').value, note:document.getElementById('mm-note').value.trim() };
-  if (editingMachineId) { const idx=machines.findIndex(m=>m.id===editingMachineId); if(idx>=0) machines[idx]={...machines[idx],...data}; }
-  else { machines.push({id:Date.now(),...data}); }
-  saveMachines(); closeMachineSheet(); renderMaster();
-  toast(editingMachineId ? '設備情報を更新しました' : '設備を登録しました');
-}
-function deleteMachineFromSheet() {
-  if (!editingMachineId) return;
-  machines = machines.filter(m=>m.id!==editingMachineId);
-  saveMachines(); closeMachineSheet(); renderMaster(); toast('設備を削除しました');
+function editMachine(id) { openMachineForm(id); }
+
+function closeMachineModal() {
+  document.getElementById('machine-modal').classList.remove('open');
 }
 
-/* ── New record form ── */
-function onNameInput() { const q=document.getElementById('f-name').value.toLowerCase(); showSuggest(q); document.getElementById('selected-chip').style.display='none'; }
-function onNameFocus() { const q=document.getElementById('f-name').value.toLowerCase(); showSuggest(q); }
-function onNameBlur() { setTimeout(()=>document.getElementById('name-suggest').classList.remove('open'), 200); }
+async function saveMachine() {
+  const name = document.getElementById('mf-name').value.trim();
+  if (!name) { showToast('設備名を入力してください'); return; }
+  const id = document.getElementById('mf-id').value;
+  const data = {
+    name, type: document.getElementById('mf-type').value,
+    maker: document.getElementById('mf-maker').value,
+    model: document.getElementById('mf-model').value,
+    location: document.getElementById('mf-location').value,
+    year: document.getElementById('mf-year').value,
+    cycle: document.getElementById('mf-cycle').value,
+    note: document.getElementById('mf-note').value,
+  };
+  if (id) {
+    const i = machines.findIndex(x=>x.id===id);
+    if (i>=0) machines[i] = {...machines[i],...data};
+  } else {
+    machines.push({id: uid(), ...data});
+  }
+  await saveMachines();
+  closeMachineModal();
+  renderMachineList();
+  showToast(id?'設備を更新しました':'設備を登録しました');
+}
 
-function showSuggest(q) {
-  const el = document.getElementById('name-suggest');
-  const filtered = machines.filter(m => !q || m.name.toLowerCase().includes(q) || (m.location||'').toLowerCase().includes(q));
-  if (!filtered.length) { el.classList.remove('open'); return; }
-  const byType = {}; TYPES.forEach(t=>byType[t]=[]);
-  filtered.forEach(m => { if(byType[m.type]) byType[m.type].push(m); });
-  let html = '';
-  TYPES.forEach((t,ti) => {
-    if (!byType[t].length) return;
-    html += `<div class="suggest-section">${TLABELS[ti]}</div>`;
-    byType[t].forEach(m => { html += `<div class="suggest-row" onmousedown="selectMachine(${m.id})"><div class="suggest-name">${m.name}</div><div class="suggest-detail">${[m.maker,m.location].filter(Boolean).join(' / ')}</div></div>`; });
-  });
-  el.innerHTML = html; el.classList.add('open');
+// ============================================================
+// RECORD CRUD
+// ============================================================
+function openRecord(id) {
+  const r = records.find(x=>x.id===id);
+  if (!r) return;
+  currentRecordId = id;
+  document.getElementById('modal-title').textContent = r.machine;
+  document.getElementById('modal-complete-btn').style.display = r.status==='done'?'none':'';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="detail-row"><div class="detail-label">設備種別</div><div class="detail-value">${typeBadge(r.type)}</div></div>
+    <div class="detail-row"><div class="detail-label">発生日</div><div class="detail-value">${fmtDate(r.date)}</div></div>
+    <div class="detail-row"><div class="detail-label">対応状況</div><div class="detail-value">${statusBadge(r.status)}</div></div>
+    <div class="detail-row"><div class="detail-label">優先度</div><div class="detail-value">${priorityBadge(r.priority)}</div></div>
+    <div class="detail-row"><div class="detail-label">カテゴリ</div><div class="detail-value">${categoryName(r.category)}</div></div>
+    <div class="detail-row"><div class="detail-label">故障内容</div><div class="detail-value">${r.desc||'-'}</div></div>
+    <div class="detail-row"><div class="detail-label">対応者</div><div class="detail-value">${r.worker||'-'}</div></div>
+    <div class="detail-row"><div class="detail-label">修繕費用</div><div class="detail-value">${fmtCost(r.cost)}</div></div>
+    <div class="detail-row"><div class="detail-label">使用部品</div><div class="detail-value">${r.parts||'-'}</div></div>
+    <div class="detail-row"><div class="detail-label">次回点検日</div><div class="detail-value">${fmtDate(r.nextCheck)}</div></div>
+    <div class="detail-row"><div class="detail-label">作業時間</div><div class="detail-value">${r.hours?r.hours+'時間':'-'}</div></div>
+    ${r.note?`<div class="detail-row"><div class="detail-label">備考</div><div class="detail-value">${r.note}</div></div>`:''}
+  `;
+  document.getElementById('record-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('record-modal').classList.remove('open');
+  currentRecordId = null;
+}
+
+async function completeRecord() {
+  if (!currentRecordId) return;
+  const r = records.find(x=>x.id===currentRecordId);
+  if (r) { r.status = 'done'; r.completedAt = Date.now(); }
+  await saveRecords();
+  closeModal();
+  renderCurrentPage();
+  showToast('完了に更新しました');
+}
+
+async function deleteRecord() {
+  if (!currentRecordId) return;
+  if (!confirm('この記録を削除しますか？')) return;
+  records = records.filter(x=>x.id!==currentRecordId);
+  await saveRecords();
+  closeModal();
+  renderCurrentPage();
+  showToast('削除しました');
+}
+
+// ============================================================
+// NEW RECORD
+// ============================================================
+function showSuggest(val) {
+  const list = document.getElementById('suggest-list');
+  if (!val || val.length < 1) { list.style.display = 'none'; return; }
+  const matches = machines.filter(m => m.name.toLowerCase().includes(val.toLowerCase())).slice(0,6);
+  if (!matches.length) { list.style.display = 'none'; return; }
+  list.style.display = '';
+  list.innerHTML = matches.map(m => `<div class="autocomplete-item" onclick="selectMachine('${m.id}')">${m.name} <small style="color:var(--text3)">${typeName(m.type)}</small></div>`).join('');
 }
 
 function selectMachine(id) {
-  const m = machines.find(x=>x.id===id); if(!m) return;
-  document.getElementById('f-name').value = m.name;
-  document.getElementById('f-type').value = m.type;
-  document.getElementById('name-suggest').classList.remove('open');
-  const ti = TYPES.indexOf(m.type);
-  document.getElementById('chip-name').innerHTML = `<span class="badge ${BBADGE[ti]||'b-wash'}">${TLABELS[ti]||m.type}</span> ${m.name}`;
-  document.getElementById('chip-detail').textContent = [m.maker&&`メーカー: ${m.maker}`, m.location&&`場所: ${m.location}`, m.cycle&&`点検: ${m.cycle}`].filter(Boolean).join('　');
-  document.getElementById('selected-chip').style.display = 'block';
+  const m = machines.find(x=>x.id===id);
+  if (!m) return;
+  document.getElementById('f-machine').value = m.name;
+  document.getElementById('f-type').value = m.type||'';
+  document.getElementById('suggest-list').style.display = 'none';
+  if (m.cycle) {
+    const next = new Date();
+    next.setDate(next.getDate() + Number(m.cycle));
+    document.getElementById('f-nextcheck').value = next.toISOString().substr(0,10);
+  }
 }
 
-function saveRec() {
-  const name = document.getElementById('f-name').value.trim();
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ac-wrap')) {
+    const list = document.getElementById('suggest-list');
+    if (list) list.style.display = 'none';
+  }
+});
+
+async function saveRecord() {
+  const machine = document.getElementById('f-machine').value.trim();
   const date = document.getElementById('f-date').value;
-  const problem = document.getElementById('f-problem').value.trim();
-  if (!name || !date || !problem) { toast('機械名・発生日・内容は必須です'); return; }
-  const cost = document.getElementById('f-cost').value;
-  recs.unshift({ id:Date.now(), type:document.getElementById('f-type').value, name, date, status:document.getElementById('f-status').value, priority:document.getElementById('f-priority').value, problem, worker:document.getElementById('f-worker').value.trim(), cost:cost?parseInt(cost):null, parts:document.getElementById('f-parts').value.trim(), cat:document.getElementById('f-cat').value, nextcheck:document.getElementById('f-nextcheck').value, note:document.getElementById('f-note').value.trim() });
-  saveRecs(); clearForm(); renderDash();
-  document.querySelectorAll('.tab-item')[0].click();
-  toast('記録を保存しました');
+  const desc = document.getElementById('f-desc').value.trim();
+  if (!machine || !date || !desc) { showToast('設備名・発生日・故障内容は必須です'); return; }
+
+  const rec = {
+    id: uid(), createdAt: Date.now(),
+    machine, date,
+    type: document.getElementById('f-type').value,
+    status: document.getElementById('f-status').value,
+    priority: document.getElementById('f-priority').value,
+    category: document.getElementById('f-category').value,
+    desc, worker: document.getElementById('f-worker').value,
+    cost: document.getElementById('f-cost').value,
+    parts: document.getElementById('f-parts').value,
+    nextCheck: document.getElementById('f-nextcheck').value,
+    hours: document.getElementById('f-hours').value,
+    note: document.getElementById('f-note').value,
+  };
+  records.push(rec);
+  await saveRecords();
+
+  // Reset form
+  ['f-machine','f-desc','f-worker','f-cost','f-parts','f-nextcheck','f-hours','f-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-status').value = 'todo';
+  document.getElementById('f-priority').value = 'mid';
+
+  showToast('記録を保存しました');
+  showPage('history', document.querySelectorAll('.nav-item')[2]);
 }
 
-function clearForm() {
-  ['f-name','f-problem','f-worker','f-cost','f-parts','f-note','f-nextcheck'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('selected-chip').style.display = 'none';
-  document.getElementById('name-suggest').classList.remove('open');
-}
+// Set today's date
+document.addEventListener('DOMContentLoaded', () => {
+  const d = document.getElementById('f-date');
+  if (d) d.value = new Date().toISOString().substr(0,10);
+});
 
-/* ── Toast ── */
-function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
-
-/* ── Init ── */
-document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-load();
-</script>
-
-<!-- PWA Service Worker registration -->
-<script>
+// ============================================================
+// PWA / SERVICE WORKER
+// ============================================================
 if ('serviceWorker' in navigator) {
-  const sw = `
-const CACHE = 'repair-v2';
-self.addEventListener('install', e => {
-  self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(['.'])));
-});
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-});
-self.addEventListener('fetch', e => e.respondWith(
-  caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-    if(res.ok){ const clone=res.clone(); caches.open(CACHE).then(c=>c.put(e.request,clone)); }
-    return res;
-  }))
-));`;
-  const blob = new Blob([sw], {type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/kikai-shuzen/sw.js').catch(()=>{});
+  });
 }
-</script>
 
+// Dynamic manifest
+const manifestData = {
+  name: '修繕管理 - 洗濯工場',
+  short_name: '修繕管理',
+  start_url: '/kikai-shuzen/',
+  display: 'standalone',
+  theme_color: '#0d9488',
+  background_color: '#f0fdfa',
+  icons: [
+    { src: '/kikai-shuzen/icon-192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/kikai-shuzen/icon-512.png', sizes: '512x512', type: 'image/png' }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  await loadData();
+  renderDashboard();
+}
+init();
+</script>
 </body>
 </html>
