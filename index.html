@@ -598,7 +598,10 @@
         <div id="machine-list-view">
           <div class="section-header" style="margin-bottom:16px">
             <span class="section-title">⚙️ 設備マスター</span>
-            <button class="btn btn-sm btn-primary" onclick="openMachineForm()">＋ 追加</button>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm btn-secondary" onclick="openImportModal()" title="修繕記録から設備を取り込む">📥 記録から取込</button>
+              <button class="btn btn-sm btn-primary" onclick="openMachineForm()">＋ 追加</button>
+            </div>
           </div>
           <div id="machine-list"></div>
         </div>
@@ -682,9 +685,26 @@
       <div class="form-group"><label>点検サイクル（日）</label><input type="number" id="mf-cycle" placeholder="例: 90"></div>
     </div>
     <div class="form-group"><label>備考</label><textarea id="mf-note" style="min-height:60px" placeholder="特記事項..."></textarea></div>
+    <div id="mf-delete-row" style="display:none;margin-bottom:8px">
+      <button class="btn btn-danger" style="width:100%" onclick="deleteMachine()">🗑️ この設備を削除する</button>
+    </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeMachineModal()">キャンセル</button>
       <button class="btn btn-primary" style="flex:1" onclick="saveMachine()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📥 修繕記録から設備を取込</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px">修繕記録に登録されている設備名のうち、まだ設備マスターにない設備を一覧表示します。チェックして「登録」を押すと設備マスターに追加されます。</p>
+    <div id="import-list"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeImportModal()">キャンセル</button>
+      <button class="btn btn-primary" style="flex:1" onclick="importMachines()">✓ 選択した設備を登録</button>
     </div>
   </div>
 </div>
@@ -718,26 +738,42 @@ function hashStr(s) {
 async function loadData() {
   try {
     const r = await window.storage.get(RECORDS_KEY, true);
-    records = r ? JSON.parse(r.value) : [];
-  } catch(e) { records = []; }
+    if (r && r.value) records = JSON.parse(r.value);
+  } catch(e) {}
   try {
     const m = await window.storage.get(MACHINES_KEY, true);
-    machines = m ? JSON.parse(m.value) : [];
-  } catch(e) { machines = []; }
+    if (m && m.value) machines = JSON.parse(m.value);
+  } catch(e) {}
 }
 
 async function saveRecords() {
+  isSyncing = true; // ポーリングをブロック
   setSyncState('syncing');
-  await window.storage.set(RECORDS_KEY, JSON.stringify(records), true);
-  lastRecordsHash = hashStr(JSON.stringify(records));
-  setSyncState('ok');
+  try {
+    const json = JSON.stringify(records);
+    await window.storage.set(RECORDS_KEY, json, true);
+    lastRecordsHash = hashStr(json);
+    setSyncState('ok');
+  } catch(e) {
+    setSyncState('error');
+    showToast('保存に失敗しました');
+  }
+  isSyncing = false;
 }
 
 async function saveMachines() {
+  isSyncing = true; // ポーリングをブロック
   setSyncState('syncing');
-  await window.storage.set(MACHINES_KEY, JSON.stringify(machines), true);
-  lastMachinesHash = hashStr(JSON.stringify(machines));
-  setSyncState('ok');
+  try {
+    const json = JSON.stringify(machines);
+    await window.storage.set(MACHINES_KEY, json, true);
+    lastMachinesHash = hashStr(json);
+    setSyncState('ok');
+  } catch(e) {
+    setSyncState('error');
+    showToast('保存に失敗しました');
+  }
+  isSyncing = false;
 }
 
 async function refreshData() {
@@ -767,8 +803,9 @@ async function pollForChanges() {
       window.storage.get(MACHINES_KEY, true).catch(() => null),
     ]);
 
-    const newRecordsJson = rRes ? rRes.value : '[]';
-    const newMachinesJson = mRes ? mRes.value : '[]';
+    // 取得失敗時は現在のデータを維持（空配列で上書きしない）
+    const newRecordsJson = (rRes && rRes.value) ? rRes.value : JSON.stringify(records);
+    const newMachinesJson = (mRes && mRes.value) ? mRes.value : JSON.stringify(machines);
     const newRH = hashStr(newRecordsJson);
     const newMH = hashStr(newMachinesJson);
 
@@ -1268,10 +1305,77 @@ function openMachineForm(id) {
     });
     document.getElementById('mf-type').value = 'wash';
   }
+  // 編集時のみ削除ボタンを表示
+  document.getElementById('mf-delete-row').style.display = id ? '' : 'none';
   document.getElementById('machine-modal').classList.add('open');
 }
 function editMachine(id) { openMachineForm(id); }
 function closeMachineModal() { document.getElementById('machine-modal').classList.remove('open'); }
+
+// ============================================================
+// IMPORT FROM RECORDS
+// ============================================================
+function openImportModal() {
+  // 修繕記録に出てくる設備名を収集
+  const registeredNames = new Set(machines.map(m => m.name));
+  const namesInRecords = [...new Set(records.map(r => r.machine).filter(Boolean))];
+  const unregistered = namesInRecords.filter(n => !registeredNames.has(n));
+
+  const listEl = document.getElementById('import-list');
+  if (!unregistered.length) {
+    listEl.innerHTML = '<div class="empty"><div class="empty-text">取り込める設備はありません<br>（すべて登録済みです）</div></div>';
+  } else {
+    listEl.innerHTML = unregistered.map((name, i) => {
+      // 修繕記録からtype推定
+      const rec = records.find(r => r.machine === name);
+      const type = rec?.type || '';
+      return `<label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer">
+        <input type="checkbox" id="imp-${i}" value="${name}" data-type="${type}" checked style="width:18px;height:18px;accent-color:var(--teal-600)">
+        <span style="flex:1">
+          <span style="font-weight:600">${name}</span>
+          <span style="font-size:11px;color:var(--text2);margin-left:6px">${{wash:'洗濯機',dry:'乾燥機',press:'プレス機',conv:'搬送コンベア',other:'その他'}[type]||'種別不明'}</span>
+        </span>
+        <span style="font-size:11px;color:var(--text2)">${records.filter(r=>r.machine===name).length}件の記録</span>
+      </label>`;
+    }).join('');
+  }
+  document.getElementById('import-modal').classList.add('open');
+}
+
+function closeImportModal() {
+  document.getElementById('import-modal').classList.remove('open');
+}
+
+async function importMachines() {
+  const checkboxes = document.querySelectorAll('#import-list input[type=checkbox]:checked');
+  if (!checkboxes.length) { showToast('設備を選択してください'); return; }
+  let count = 0;
+  checkboxes.forEach(cb => {
+    const name = cb.value;
+    const type = cb.dataset.type || 'other';
+    if (!machines.find(m => m.name === name)) {
+      machines.push({ id: uid(), name, type, maker:'', model:'', location:'', year:'', cycle:'', note:'' });
+      count++;
+    }
+  });
+  await saveMachines();
+  closeImportModal();
+  renderMachineList();
+  showToast(`${count}件の設備を登録しました`);
+}
+
+async function deleteMachine() {
+  const id = document.getElementById('mf-id').value;
+  if (!id) return;
+  const m = machines.find(x=>x.id===id);
+  if (!m) return;
+  if (!confirm(`「${m.name}」を削除しますか？\n※この設備の修繕記録は残ります`)) return;
+  machines = machines.filter(x=>x.id!==id);
+  await saveMachines();
+  closeMachineModal();
+  renderMachineList();
+  showToast('設備を削除しました');
+}
 
 async function saveMachine() {
   const name = document.getElementById('mf-name').value.trim();
@@ -1438,6 +1542,9 @@ document.getElementById('manifest-link').href = URL.createObjectURL(blob);
 // INIT
 // ============================================================
 async function init() {
+  // 初回は空配列から始める（loadDataで上書きされる）
+  records = [];
+  machines = [];
   initLayout();
   setSyncState('syncing');
   await loadData();
