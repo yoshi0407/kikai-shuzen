@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="修繕管理">
 <title>修繕管理 - 洗濯工場</title>
+<!-- ★ HTMLを更新したらこの番号を変えてください（例: 2025-01-15-002） -->
+<meta name="app-version" content="2025-01-15-001">
 <link rel="manifest" href="#" id="manifest-link">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -366,6 +368,9 @@
 
 <!-- Sync notification banner -->
 <div class="sync-banner" id="sync-banner">📡 他のデバイスでデータが更新されました</div>
+<div class="sync-banner" id="update-banner" style="background:#7c3aed;cursor:pointer" onclick="doAppUpdate()">
+  🆕 アプリが更新されています。タップして最新版に切替 →
+</div>
 
 <div id="layout">
   <div id="main">
@@ -724,6 +729,8 @@ let chartMachine = null, chartMonthly = null, chartCost = null;
 
 const RECORDS_KEY = 'shared_laundry_repair_v1';
 const MACHINES_KEY = 'shared_laundry_machines_v1';
+const VERSION_KEY = 'shared_laundry_app_version_v1';
+const APP_VERSION = document.querySelector('meta[name="app-version"]').content;
 
 // Snapshot hashes for change detection
 let lastRecordsHash = '';
@@ -798,10 +805,17 @@ async function pollForChanges() {
   if (isSyncing) return;
   isSyncing = true;
   try {
-    const [rRes, mRes] = await Promise.all([
+    // バージョンチェックも同時に行う
+    const [rRes, mRes, vRes] = await Promise.all([
       window.storage.get(RECORDS_KEY, true).catch(() => null),
       window.storage.get(MACHINES_KEY, true).catch(() => null),
+      window.storage.get(VERSION_KEY, true).catch(() => null),
     ]);
+
+    // アプリバージョンチェック
+    if (vRes && vRes.value && vRes.value !== APP_VERSION) {
+      showUpdateBanner();
+    }
 
     // 取得失敗時は現在のデータを維持（空配列で上書きしない）
     const newRecordsJson = (rRes && rRes.value) ? rRes.value : JSON.stringify(records);
@@ -864,6 +878,39 @@ function showSyncBanner() {
   const b = document.getElementById('sync-banner');
   b.classList.add('show');
   setTimeout(() => b.classList.remove('show'), 3500);
+}
+
+// ============================================================
+// APP VERSION UPDATE
+// ============================================================
+function showUpdateBanner() {
+  const b = document.getElementById('update-banner');
+  if (b) b.classList.add('show');
+  // データ同期バナーは隠す（更新バナー優先）
+  const sb = document.getElementById('sync-banner');
+  if (sb) sb.classList.remove('show');
+}
+
+function doAppUpdate() {
+  // キャッシュをクリアして強制リロード
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(r => r.unregister());
+    });
+  }
+  // ブラウザキャッシュを無視してリロード
+  window.location.reload(true);
+}
+
+// init時に自分のバージョンをストレージに書き込む（最新版が起動したら更新）
+async function registerAppVersion() {
+  try {
+    const current = await window.storage.get(VERSION_KEY, true).catch(() => null);
+    // 自分のバージョンの方が新しい（または未登録）なら書き込む
+    if (!current || !current.value || current.value !== APP_VERSION) {
+      await window.storage.set(VERSION_KEY, APP_VERSION, true);
+    }
+  } catch(e) {}
 }
 
 function updateAlertBadge() {
@@ -1555,6 +1602,8 @@ async function init() {
   updateAlertBadge();
   renderDashboard();
   startSync();
+  // 自分のバージョンをストレージに登録（他デバイスに通知）
+  await registerAppVersion();
 }
 init();
 </script>
