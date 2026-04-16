@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0d9488">
+<meta name="theme-color" content="#1a3a6e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="修繕管理">
 <title>修繕管理 - 洗濯工場</title>
 <!-- ★ HTMLを更新したらこの番号を変えてください（例: 2025-01-15-002） -->
-<meta name="app-version" content="2025-01-15-001">
+<meta name="app-version" content="2025-01-15-002">
 <link rel="manifest" href="#" id="manifest-link">
+<link rel="apple-touch-icon" id="apple-touch-icon-link">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -873,23 +874,19 @@ function showSyncBanner() {
 function showUpdateBanner() {
   const b = document.getElementById('update-banner');
   if (b) b.classList.add('show');
-  // データ同期バナーは隠す（更新バナー優先）
   const sb = document.getElementById('sync-banner');
   if (sb) sb.classList.remove('show');
 }
 
 function doAppUpdate() {
-  // キャッシュをクリアして強制リロード
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(regs => {
       regs.forEach(r => r.unregister());
     });
   }
-  // ブラウザキャッシュを無視してリロード
   window.location.reload(true);
 }
 
-// バージョン情報は saveAll 内で自動書き込みされるため個別処理不要
 async function registerAppVersion() {}
 
 function updateAlertBadge() {
@@ -979,9 +976,7 @@ function showPage(name, el, sidebarId) {
   document.querySelectorAll('.sidebar-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if (el) el.classList.add('active');
-  // Also activate corresponding sidebar item
   if (sidebarId) { const si = document.getElementById(sidebarId); if (si) si.classList.add('active'); }
-  // Sync mobile nav active state
   const navIdx = ['dashboard','new','history','analysis','alerts','machines'].indexOf(name);
   if (navIdx >= 0) { document.querySelectorAll('.nav-item')[navIdx]?.classList.add('active'); }
   currentPage = name;
@@ -1331,7 +1326,6 @@ function openMachineForm(id) {
     });
     document.getElementById('mf-type').value = 'wash';
   }
-  // 編集時のみ削除ボタンを表示
   document.getElementById('mf-delete-row').style.display = id ? '' : 'none';
   document.getElementById('machine-modal').classList.add('open');
 }
@@ -1342,7 +1336,6 @@ function closeMachineModal() { document.getElementById('machine-modal').classLis
 // IMPORT FROM RECORDS
 // ============================================================
 function openImportModal() {
-  // 修繕記録に出てくる設備名を収集
   const registeredNames = new Set(machines.map(m => m.name));
   const namesInRecords = [...new Set(records.map(r => r.machine).filter(Boolean))];
   const unregistered = namesInRecords.filter(n => !registeredNames.has(n));
@@ -1352,7 +1345,6 @@ function openImportModal() {
     listEl.innerHTML = '<div class="empty"><div class="empty-text">取り込める設備はありません<br>（すべて登録済みです）</div></div>';
   } else {
     listEl.innerHTML = unregistered.map((name, i) => {
-      // 修繕記録からtype推定
       const rec = records.find(r => r.machine === name);
       const type = rec?.type || '';
       return `<label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer">
@@ -1533,7 +1525,6 @@ async function saveRecord() {
   document.getElementById('f-status').value = 'todo';
   document.getElementById('f-priority').value = 'mid';
   showToast('記録を保存しました');
-  // PC: サイドバーの履歴をクリック / Mobile: nav
   const isPC = window.innerWidth >= 768;
   if (isPC) { showPage('history', null, 'si-history'); }
   else { showPage('history', document.querySelectorAll('.nav-item')[2]); }
@@ -1545,8 +1536,38 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// PWA
+// PWA ICON (SVGインライン生成 - 外部ファイル不要)
 // ============================================================
+function buildIconSVG(size) {
+  const s = size / 192;
+  const rx = Math.round(40 * s);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  <rect width="${size}" height="${size}" rx="${rx}" fill="#1a3a6e"/>
+  <circle cx="${96*s}" cy="${88*s}" r="${52*s}" fill="none" stroke="#4a8fd4" stroke-width="${10*s}"/>
+  <circle cx="${96*s}" cy="${88*s}" r="${36*s}" fill="none" stroke="#4a8fd4" stroke-width="${3*s}" stroke-dasharray="${6*s} ${4*s}"/>
+  <circle cx="${96*s}" cy="${88*s}" r="${8*s}" fill="#4a8fd4"/>
+  <g transform="translate(${118*s} ${50*s}) rotate(45)">
+    <rect x="${-5*s}" y="${-18*s}" width="${10*s}" height="${28*s}" rx="${3*s}" fill="#e8a020"/>
+    <rect x="${-9*s}" y="${-22*s}" width="${18*s}" height="${8*s}" rx="${4*s}" fill="#e8a020"/>
+    <rect x="${-9*s}" y="${6*s}" width="${18*s}" height="${8*s}" rx="${4*s}" fill="#e8a020"/>
+  </g>
+  <circle cx="${140*s}" cy="${145*s}" r="${20*s}" fill="#2a7d4f"/>
+  <polyline points="${131*s},${145*s} ${138*s},${153*s} ${151*s},${138*s}" fill="none" stroke="white" stroke-width="${4*s}" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="${96*s}" y="${160*s}" text-anchor="middle" fill="white" font-size="${13*s}" font-weight="600" font-family="'Hiragino Sans','Yu Gothic',sans-serif">修繕管理</text>
+  <text x="${96*s}" y="${178*s}" text-anchor="middle" fill="#7090c0" font-size="${10*s}" font-family="sans-serif">MAINTENANCE</text>
+</svg>`;
+}
+function svgToDataURL(svg) {
+  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+}
+const icon192url = svgToDataURL(buildIconSVG(192));
+const icon512url = svgToDataURL(buildIconSVG(512));
+
+// apple-touch-icon に設定
+const _atil = document.getElementById('apple-touch-icon-link');
+if (_atil) _atil.href = icon192url;
+
+// PWA manifest
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/kikai-shuzen/sw.js').catch(()=>{});
@@ -1555,10 +1576,10 @@ if ('serviceWorker' in navigator) {
 const manifestData = {
   name: '修繕管理 - 洗濯工場', short_name: '修繕管理',
   start_url: '/kikai-shuzen/', display: 'standalone',
-  theme_color: '#0d9488', background_color: '#f0fdfa',
+  theme_color: '#1a3a6e', background_color: '#1a3a6e',
   icons: [
-    { src: '/kikai-shuzen/icon-192.png', sizes: '192x192', type: 'image/png' },
-    { src: '/kikai-shuzen/icon-512.png', sizes: '512x512', type: 'image/png' }
+    { src: icon192url, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+    { src: icon512url, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
   ]
 };
 const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
@@ -1568,7 +1589,6 @@ document.getElementById('manifest-link').href = URL.createObjectURL(blob);
 // INIT
 // ============================================================
 async function init() {
-  // 初回は空配列から始める（loadDataで上書きされる）
   records = [];
   machines = [];
   initLayout();
@@ -1581,7 +1601,6 @@ async function init() {
   updateAlertBadge();
   renderDashboard();
   startSync();
-  // 自分のバージョンをストレージに登録（他デバイスに通知）
   await registerAppVersion();
 }
 init();
